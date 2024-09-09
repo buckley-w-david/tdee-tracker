@@ -1,0 +1,45 @@
+@import 'bootstrap';
+@import 'bootstrap-icons';
+
+#flash-container {
+  position: fixed;
+  bottom: -48px;
+  right: 24px;
+  z-index: 1060;
+
+  &.open {
+    animation: slide-up 3s forwards;
+  }
+
+  .flash {
+    background-color: var(--bs-dark);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &.danger {
+      background-color: var(--bs-danger);
+    }
+  }
+}
+
+@keyframes slide-up {
+  0%,
+  16.67% {
+    bottom: -48px;
+  }
+
+  25%,
+  85% {
+    bottom: 48px;
+  }
+
+  93.33%,
+  100% {
+    bottom: -48px;
+  }
+}

@@ -1,0 +1,42 @@
+<div id="stats" class="my-3">
+  <div class="border rounded p-3">
+    <%= line_chart(
+      [{
+        name: "kcal",
+        data: @kilocalories,
+      },
+      {
+        name: "TDEE",
+        data: @tdee_data,
+      }],
+      min: nil,
+      ytitle: "TDEE (kcal)"
+    ) %>
+  </div>
+  <div class="border rounded p-3 mt-2">
+    <%= line_chart(
+      [{
+        name: "Weight",
+        data: @weight,
+      },
+      {
+        name: "EMA",
+        data: @ema,
+      }],
+      min: nil,
+      ytitle: "Weight (lbs)",
+    ) %>
+  </div>
+  <p class="text-center fw-semibold mt-1">If the blue line is below the red line, you are making progress</p>
+</div>
+
+<div class="rounded border p-3">
+  <%= turbo_frame_tag("entry") do %>
+    <%= link_to("←", day_path(@date.advance(days: -1))) %>
+    <%= link_to("→", day_path(@date.advance(days: 1))) %>
+
+    <div data-turbo="false">
+      <%= render 'entries/form', entry: @entry %>
+    </div>
+  <% end %>
+</div>

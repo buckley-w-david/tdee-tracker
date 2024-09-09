@@ -1,0 +1,16 @@
+<%= turbo_frame_tag 'entry' do %>
+  <%= form_with(model: entry) do |form| %>
+    <p class="fw-semibold"><%= form.object.date.strftime("%B %d") %></p>
+    <div class="mb-3">
+      <%= form.label(:kilocalories, "Kilocalories", class: "form-label") %>
+      <%= form.number_field(:kilocalories, class: "form-control") %>
+    </div>
+    <div class="mb-3">
+      <%= form.label(:weight, "Weight", class: "form-label") %>
+      <%= form.number_field(:weight, class: "form-control", step: 0.01) %>
+    </div>
+    <%= form.hidden_field(:date) %>
+
+    <%= form.submit("Save", class: "btn btn-primary") %>
+  <% end %>
+<% end %>

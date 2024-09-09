@@ -1,0 +1,2 @@
+class TotalDailyExpendedEnergy < ApplicationRecord
+end

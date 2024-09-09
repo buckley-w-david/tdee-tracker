@@ -1,0 +1,11 @@
+<div id='flash-container' class="<%= flash.any? ? "open" : nil %>">
+  <% flash.each do |type, message| %>
+    <div
+      class="flash"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true">
+      <%= sanitize(message, tags: ["a"], attributes: ["href", "turbo_frame", "class"]) %>
+    </div>
+  <% end %>
+</div>
