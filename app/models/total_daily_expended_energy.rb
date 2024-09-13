@@ -1,2 +1,0 @@
-class TotalDailyExpendedEnergy < ApplicationRecord
-end

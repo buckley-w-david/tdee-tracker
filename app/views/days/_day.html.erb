@@ -1,0 +1,12 @@
+<div class="rounded border p-3">
+  <%= link_to("←", by_date_days_path(day.date.advance(days: -1))) %>
+  <%= link_to("→", by_date_days_path(day.date.advance(days: 1))) %>
+
+  <div data-turbo="false">
+    <%= link_to(calendar_path(start_date: day.date), class: "text-reset") do %>
+      <p class="fw-semibold"><%= day.date.strftime("%B %d") %></p>
+    <% end %>
+
+    <%= render 'days/form', day: day %>
+  </div>
+</div>

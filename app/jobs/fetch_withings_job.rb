@@ -23,14 +23,13 @@ class FetchWithingsJob < ApplicationJob
           next unless measure["type"] == Withings::MeasureType::WEIGHT
 
           kg = measure["value"] * 10**measure["unit"]
+          # FIXME: Harcoded number bad
           lbs = 2.20462 * kg
 
-          entry = user.entries.find_or_initialize_by(date:)
-          entry.weight = lbs.round(2)
+          day = user.days.find_or_initialize_by(date:)
+          day.weight = lbs.round(2)
 
-          if entry.weight_changed?
-            entry.update!(weight: lbs) if entry.weight_changed?
-          end
+          day.save! if day.weight_changed?
         end
       end
     end

@@ -10,25 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_02_172333) do
-  create_table "entries", force: :cascade do |t|
+ActiveRecord::Schema[7.2].define(version: 2024_09_13_013526) do
+  create_table "days", force: :cascade do |t|
     t.integer "kilocalories"
     t.float "weight"
     t.date "date"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_entries_on_user_id"
+    t.integer "total_daily_expended_energy"
+    t.index ["user_id"], name: "index_days_on_user_id"
   end
 
-  create_table "total_daily_expended_energies", force: :cascade do |t|
-    t.integer "tdee", null: false
-    t.integer "span", null: false
-    t.date "date", null: false
-    t.integer "user_id", null: false
+  create_table "foods", force: :cascade do |t|
+    t.string "name"
+    t.integer "kilocalories"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_total_daily_expended_energies_on_user_id"
+    t.integer "meal_id", null: false
+    t.index ["meal_id"], name: "index_foods_on_meal_id"
+  end
+
+  create_table "goals", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.float "change_per_week"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_goals_on_user_id"
+  end
+
+  create_table "meals", force: :cascade do |t|
+    t.integer "day_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["day_id"], name: "index_meals_on_day_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,6 +59,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_02_172333) do
     t.datetime "withings_last_updated_at"
   end
 
-  add_foreign_key "entries", "users"
-  add_foreign_key "total_daily_expended_energies", "users"
+  add_foreign_key "days", "users"
+  add_foreign_key "foods", "meals"
+  add_foreign_key "goals", "users"
+  add_foreign_key "meals", "days"
 end

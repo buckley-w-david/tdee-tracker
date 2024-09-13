@@ -1,22 +1,25 @@
-require 'line_fit'
+require "line_fit"
 
 class TdeeService
   class << self
-    def calculate(user, end_date, span)
-      start_date = end_date - span.days
+    def calculate(day)
+      user = day.user
+      end_date = day.date
+      start_date = end_date - 49.days # TODO: Don't hardcode this
 
       # We go back 1 day for the start and end because the calories on day n affects the weight on day n+1
-      calories = user.entries.where(date: (start_date - 1.days)..(end_date - 1.days)).average(:kilocalories)
+      calories = user.days.where(date: (start_date - 1.days)..(end_date - 1.days)).average(:kilocalories)
 
       x = []
       y = []
 
-      records = user.entries.where(date: start_date..end_date).order(:date)
-      records.each do |entry|
-        next unless entry.weight
+      # TODO: Validate that this range has the right inclusivity on the end points
+      records = user.days.where(date: start_date..end_date).order(:date)
+      records.each do |day|
+        next unless day.weight
 
-        y << entry.weight
-        x << (entry.date - start_date).to_i
+        y << day.weight
+        x << (day.date - start_date).to_i
       end
 
       linefit = LineFit.new

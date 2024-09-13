@@ -1,0 +1,4 @@
+<%= form_with(model: @goal) do |form| %>
+  <%= form.label(:change_per_week, "Δ Weight (per week)", class: "form-label") %>
+  <%= form.number_field(:change_per_week, class: "form-control", step: 0.01) %>
+<% end %>

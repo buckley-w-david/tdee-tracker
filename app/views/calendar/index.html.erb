@@ -1,0 +1,13 @@
+<%= month_calendar do |date| %>
+  <div class="text-reset d-flex flex-column justify-content-between h-100")>
+    <% if date.day == 1 %>
+      <span><%= date.strftime("%B %d") %></span>
+    <% else %>
+      <span><%= date.strftime("%d") %></span>
+    <% end %>
+    <% day = @days[date] %>
+    <% if day %>
+      <span><%= [day.weight, day.kilocalories].compact.join(" / ") %></span>
+    <% end %>
+  </div>
+<% end %>

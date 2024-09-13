@@ -43,7 +43,6 @@
 #
 
 class LineFit
-
    ############################################################################
    # Create a LineFit object with the optional validate and hush parameters
    #
@@ -71,7 +70,7 @@ class LineFit
    # The returned list is undefined if the regression fails.
    #
    def coefficients
-      self.regress unless (@intercept and @slope)
+      self.regress unless @intercept and @slope
       return @intercept, @slope
    end
 
@@ -99,7 +98,7 @@ class LineFit
          end
          @durbinWatson = sumSqErrors() > 0 ? sumErrDiff / sumSqErrors() : 0
       end
-      return @durbinWatson
+      @durbinWatson
    end
 
    ############################################################################
@@ -115,7 +114,7 @@ class LineFit
          self.regress or return
          @meanSqError = sumSqErrors() / @numxy
       end
-      return @meanSqError
+      @meanSqError
    end
 
    ############################################################################
@@ -133,7 +132,7 @@ class LineFit
             @predictedYs[i] = @intercept + @slope * @x[i]
          end
       end
-      return @predictedYs
+      @predictedYs
    end
 
    ############################################################################
@@ -145,8 +144,8 @@ class LineFit
    # at the x value. Note: value returned only as good as the line fit.
    #
    def forecast(x)
-      self.regress unless (@intercept and @slope)
-      return @slope * x + @intercept
+      self.regress unless @intercept and @slope
+      @slope * x + @intercept
    end
 
    ############################################################################
@@ -178,7 +177,7 @@ class LineFit
          @regressOK = false
       end
       @doneRegress = true
-      return @regressOK
+      @regressOK
    end
 
    ############################################################################
@@ -196,7 +195,7 @@ class LineFit
             @residuals[i] = @y[i] - (@intercept + @slope * @x[i])
          end
       end
-      return @residuals
+      @residuals
    end
 
    ############################################################################
@@ -221,7 +220,7 @@ class LineFit
          denom = @sumSqDevx * @sumSqDevy
          @rSquared = denom != 0 ? @sumSqDevxy ** 2 / denom : 1
       end
-      return @rSquared
+      @rSquared
    end
 
    ############################################################################
@@ -289,7 +288,7 @@ class LineFit
          end
       end
       @gotData = true
-      return true
+      true
    end
 
    ############################################################################
@@ -309,7 +308,7 @@ class LineFit
          self.regress or return
          @sigma = @numxy > 2 ? Math.sqrt(sumSqErrors() / (@numxy - 2)) : 0
       end
-      return @sigma
+      @sigma
    end
 
    ############################################################################
@@ -327,7 +326,7 @@ class LineFit
    # input, the returned values are the weighted t statistics.
    #
    def tStatistics
-      unless (@tStatInt and @tStatSlope)
+      unless @tStatInt and @tStatSlope
          self.regress or return
          biasEstimateInt = sigma() * Math.sqrt(@sumxx / (@sumSqDevx * @numxy))
          @tStatInt = biasEstimateInt != 0 ? @intercept / biasEstimateInt : 0
@@ -379,7 +378,7 @@ class LineFit
       end
       denominator = (s * sxx - sx ** 2)
       if denominator == 0
-         return
+         nil
       else
          return sxx / denominator, s / denominator
       end
@@ -439,9 +438,9 @@ private
          return false
       end
       factor = weights.length.to_f / sumw
-      weights.collect! {|weight| weight * factor}
+      weights.collect! { |weight| weight * factor }
       @weight = weights
-      return true
+      true
    end
 
    ############################################################################
@@ -453,7 +452,7 @@ private
          @sumSqErrors = @sumSqDevy - @sumSqDevx * @slope ** 2
          @sumSqErrors = 0 if @sumSqErrors < 0
       end
-      return @sumSqErrors
+      @sumSqErrors
    end
 
    ############################################################################
@@ -478,7 +477,7 @@ private
             return false
          end
       end
-      return true
+      true
    end
 
    ############################################################################
@@ -495,7 +494,6 @@ private
             return false
          end
       end
-      return true
+      true
    end
-
 end

@@ -54,6 +54,8 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  gem "solargraph", require: false
 end
 
 group :test do
@@ -69,3 +71,9 @@ gem "faraday", "~> 2.11"
 gem "chartkick", "~> 5.1"
 
 gem "technical-analysis", "~> 0.2.4"
+
+gem "solid_queue", "~> 0.8.2"
+
+gem "simple_calendar", "~> 3.0"
+
+gem "pagy", "~> 9.0"

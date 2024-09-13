@@ -30,13 +30,10 @@
   <p class="text-center fw-semibold mt-1">If the blue line is below the red line, you are making progress</p>
 </div>
 
-<div class="rounded border p-3">
-  <%= turbo_frame_tag("entry") do %>
-    <%= link_to("←", day_path(@date.advance(days: -1))) %>
-    <%= link_to("→", day_path(@date.advance(days: 1))) %>
+<% if @target_kilocalories  %>
+  <div class="rounded border p-3 mb-3">
+    <span class="fw-semibold">Target:</span> <%= @target_kilocalories %> kcal
+  </div>
+<% end %>
 
-    <div data-turbo="false">
-      <%= render 'entries/form', entry: @entry %>
-    </div>
-  <% end %>
-</div>
+<%= render template: "days/edit" %>

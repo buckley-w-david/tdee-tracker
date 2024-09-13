@@ -10,18 +10,23 @@ Rails.application.routes.draw do
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Defines the root path route ("/")
-  root "day#index"
+  root "days#index"
 
-  resources :day do
-  end
-
-  resources :entries do
+  resources :days do
     collection do
-      get 'by_date'
-      get 'import'
-      post 'import', action: "import_values"
+      get "import"
+      post "import", action: "import_values"
+      get "by_date/:date", action: "by_date", as: :by_date
+    end
+
+    resources :meals, controller: :"day/meals" do
+      resources :foods, controller: :"day/meal/foods"
     end
   end
+
+  resources :goals
+
+  get "calendar", controller: "calendar", action: "index"
 
   get "withings", controller: "withings", action: "register"
 end

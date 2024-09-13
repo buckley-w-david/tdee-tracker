@@ -1,10 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
-  has_many :entries
-  has_many :total_daily_expended_energies
-
-  alias_method :tdees, :total_daily_expended_energies
+  has_many :days
+  has_one :goal
 
   # I am not sure I like sticking this here...
   def withings_client
@@ -18,6 +16,6 @@ class User < ApplicationRecord
       )
     end
 
-    client = Withings::Client.new(withings_access_token)
+    Withings::Client.new(withings_access_token)
   end
 end
