@@ -62,7 +62,7 @@ end
 
 gem "sassc-rails", "~> 2.1"
 
-gem "faraday", "~> 2.11"
+gem "faraday", "~> 2.12"
 
 gem "chartkick", "~> 5.1"
 

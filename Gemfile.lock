@@ -111,8 +111,9 @@ GEM
     drb (2.2.1)
     erubi (1.13.0)
     execjs (2.9.1)
-    faraday (2.11.0)
+    faraday (2.12.0)
       faraday-net_http (>= 2.0, < 3.4)
+      json
       logger
     faraday-net_http (3.3.0)
       net-http
@@ -139,7 +140,7 @@ GEM
       activesupport (>= 5.0.0)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
-    logger (1.6.0)
+    logger (1.6.1)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -345,7 +346,7 @@ DEPENDENCIES
   capybara
   chartkick (~> 5.1)
   debug
-  faraday (~> 2.11)
+  faraday (~> 2.12)
   importmap-rails
   jbuilder
   puma (>= 5.0)
