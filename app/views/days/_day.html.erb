@@ -8,5 +8,9 @@
     <% end %>
 
     <%= render 'days/form', day: day %>
+
+    <% if day.persisted? %>
+      <%= link_to("Meals", day_meals_path(day), class: "btn btn-outline-primary mt-3") %>
+    <% end %>
   </div>
 </div>

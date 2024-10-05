@@ -1,0 +1,22 @@
+.autocomplete-results {
+  position: absolute;
+  margin-top: 55px;
+  background-color: white;
+  z-index: 1000;
+  max-width: fit-content;
+
+ ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+ li {
+    padding: 5px 0;
+  }
+
+ li:hover {
+    background-color: #eee;
+    cursor: pointer;
+  }
+}

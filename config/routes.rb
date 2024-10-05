@@ -19,14 +19,23 @@ Rails.application.routes.draw do
       get "by_date/:date", action: "by_date", as: :by_date
     end
 
-    resources :meals, controller: :"day/meals" do
-      resources :foods, controller: :"day/meal/foods"
+    resources :meals, module: :day do
+      collection do
+        get "copy"
+      end
     end
   end
+
+  get "admin/import", controller: "admin", action: "import"
+  post "admin/import", controller: "admin", action: "import_foods"
+
+  post "foods/search", controller: "food_search", action: "search", as: :food_search
 
   resources :goals
 
   get "calendar", controller: "calendar", action: "index"
 
   get "withings", controller: "withings", action: "register"
+
+  get "stats", controller: "stats", action: "index"
 end

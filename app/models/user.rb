@@ -4,6 +4,10 @@ class User < ApplicationRecord
   has_many :days
   has_one :goal
 
+  has_many :meals, through: :days
+  has_many :food_entries, through: :meals
+  has_many :foods, through: :food_entries
+
   # I am not sure I like sticking this here...
   def withings_client
     if Time.current >= withings_expires_at

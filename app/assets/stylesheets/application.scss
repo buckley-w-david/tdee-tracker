@@ -2,6 +2,8 @@
 @import 'bootstrap-icons';
 @import "simple_calendar";
 
+@import 'meals/food.scss';
+
 #flash-container {
   position: fixed;
   bottom: -48px;

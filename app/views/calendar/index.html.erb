@@ -11,3 +11,19 @@
     <% end %>
   </div>
 <% end %>
+
+<div class="border rounded p-3 mt-2">
+  <%= line_chart(
+    [{
+      name: "Weight",
+      data: @weight,
+    },
+    {
+      name: "EMA",
+      data: @ema,
+    }],
+    min: nil,
+    ytitle: "Weight (lbs)",
+    download: true,
+  ) %>
+</div>

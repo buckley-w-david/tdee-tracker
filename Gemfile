@@ -77,3 +77,7 @@ gem "solid_queue", "~> 0.8.2"
 gem "simple_calendar", "~> 3.0"
 
 gem "pagy", "~> 9.0"
+
+gem "rack-mini-profiler", "~> 3.3"
+
+gem "oga", "~> 3.4"

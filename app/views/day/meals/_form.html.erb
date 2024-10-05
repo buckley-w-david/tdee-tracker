@@ -1,17 +1,47 @@
-<%= form_with(model: meal) do |form| %>
-  <% if meal.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(meal.errors.count, "error") %> prohibited this meal from being saved:</h2>
+<div data-controller="meal" class="mt-3">
+<style>
+  .food:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+</style>
+  <%= form_with(model: meal, url: [@day, meal], html: { autocomplete: "off" }) do |form| %>
+    <% if meal.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(meal.errors.count, "error") %> prohibited this meal from being saved:</h2>
 
-      <ul>
-        <% meal.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+        <ul>
+          <% meal.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form.text_field(:name, placeholder: "Name", class: "form-control") %>
+
+    <%= form.fields_for :food_entries do |food| %>
+      <%= render "food_fields", food: food, hide_init: true %>
+    <% end %>
+
+    <span data-meal-target="foodend"></span>
+
+    <div class="mt-2">
+      <button class="btn btn-secondary" type="button" data-action="click->meal#addFood" data-meal-target="add">Add Food</button>
+      <%= form.submit(class: "btn btn-primary") %>
     </div>
   <% end %>
 
-  <div>
-    <%= form.submit %>
+  <!-- Hidden form for adding new foods -->
+  <%# TODO: Evaluate if Turbo Streams are a better solution than this hidden form %>
+  <div style="display: none !important;" aria-hidden="true">
+    <%= form_with(model: meal, url: [@day, meal]) do |form| %>
+      <%= form.fields(:food_entries, model: FoodEntry.new, child_index: "NEW_RECORD") do |food| %>
+        <!-- When the "Add Food" button is clicked, some javascript copies this form into the main one -->
+        <div data-meal-target="empty">
+          <%= render "food_fields", food: food, hide_init: false %>
+        </div>
+      <% end %>
+    <% end %>
+    <hr>
   </div>
-<% end %>
+</div>

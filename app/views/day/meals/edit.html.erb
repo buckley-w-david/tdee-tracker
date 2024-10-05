@@ -1,12 +1,9 @@
 <% content_for :title, "Editing meal" %>
 
-<h1>Editing meal</h1>
-
 <%= render "form", meal: @meal %>
 
 <br>
 
 <div>
-  <%= link_to "Show this meal", day_meal_path(@day, @meal) %> |
   <%= link_to "Back to meals", day_meals_path(@day) %>
 </div>

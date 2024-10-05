@@ -1,8 +1,8 @@
 require "line_fit"
 
-class TdeeService
+class FancyTdeeService
   class << self
-    def calculate(day, period: 49)
+    def calculate(day, period: 14)
       user = day.user
       end_date = day.date
       start_date = end_date - period.days
@@ -13,13 +13,15 @@ class TdeeService
       x = []
       y = []
 
-      # TODO: Validate that this range has the right inclusivity on the end points
-      records = user.days.where(date: start_date..end_date).order(:date)
-      records.each do |day|
-        next unless day.weight
+      weight = user.days
+        .where.not(weight: nil)
+        .order(date: :asc)
+        .pluck(:date, :weight)
 
-        y << day.weight
-        x << (day.date - start_date).to_i
+      ema = TechnicalAnalysis::Ema.calculate(weight.map { |d, t| { date_time: d, value: t } }, period:).each do |ema|
+        next if ema.date_time < start_date
+        y << ema.ema
+        x << (ema.date_time - start_date).to_i
       end
 
       linefit = LineFit.new

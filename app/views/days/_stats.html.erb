@@ -1,0 +1,36 @@
+<%= turbo_frame_tag "stats" do %>
+  <div class="border rounded p-3">
+    <%= line_chart(
+      [{
+        name: "kcal",
+        data: @kilocalories,
+      },
+      {
+        name: "TDEE",
+        data: @tdee_data,
+      },
+      {
+        name: "TDEE (ALT)",
+        data: @tdee_alt,
+      }],
+      min: nil,
+      ytitle: "TDEE (kcal)",
+      download: true,
+    ) %>
+  </div>
+  <div class="border rounded p-3 mt-2">
+    <%= line_chart(
+      [{
+        name: "Weight",
+        data: @weight,
+      },
+      {
+        name: "EMA",
+        data: @ema,
+      }],
+      min: nil,
+      ytitle: "Weight (lbs)",
+      download: true,
+    ) %>
+  </div>
+<% end %>

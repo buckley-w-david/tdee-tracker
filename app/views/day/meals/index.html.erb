@@ -2,15 +2,14 @@
 
 <% content_for :title, "Meals" %>
 
-<h1>Meals</h1>
+<h1>Meals for <%= l(@day.date, format: :short) %> </h1>
 
 <div id="meals">
   <% @meals.each do |meal| %>
-    <%= render meal %>
     <p>
-      <%= link_to "Show this meal", day_meal_path(@day, meal) %>
+      <%= link_to meal.name, edit_day_meal_path(@day, meal) %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New meal", new_day_meal_path(@day) %>
+<%= link_to "Add a meal", new_day_meal_path(@day) %> | <%= link_to "Copy a meal", copy_day_meals_path(@day) %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_13_013526) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_16_194419) do
   create_table "days", force: :cascade do |t|
     t.integer "kilocalories"
     t.float "weight"
@@ -19,16 +19,27 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_13_013526) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "total_daily_expended_energy"
-    t.index ["user_id"], name: "index_days_on_user_id"
+    t.index [ "user_id" ], name: "index_days_on_user_id"
+  end
+
+  create_table "food_entries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "meal_id", null: false
+    t.float "quantity"
+    t.string "unit"
+    t.integer "food_id", null: false
+    t.index [ "food_id" ], name: "index_food_entries_on_food_id"
+    t.index [ "meal_id" ], name: "index_food_entries_on_meal_id"
   end
 
   create_table "foods", force: :cascade do |t|
     t.string "name"
-    t.integer "kilocalories"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "meal_id", null: false
-    t.index ["meal_id"], name: "index_foods_on_meal_id"
+    t.integer "quantity"
+    t.string "unit"
+    t.integer "kilocalories"
   end
 
   create_table "goals", force: :cascade do |t|
@@ -36,7 +47,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_13_013526) do
     t.float "change_per_week"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_goals_on_user_id"
+    t.index [ "user_id" ], name: "index_goals_on_user_id"
   end
 
   create_table "meals", force: :cascade do |t|
@@ -44,7 +55,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_13_013526) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["day_id"], name: "index_meals_on_day_id"
+    t.index [ "day_id" ], name: "index_meals_on_day_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -60,7 +71,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_13_013526) do
   end
 
   add_foreign_key "days", "users"
-  add_foreign_key "foods", "meals"
+  add_foreign_key "food_entries", "foods"
+  add_foreign_key "food_entries", "meals"
   add_foreign_key "goals", "users"
   add_foreign_key "meals", "days"
 end

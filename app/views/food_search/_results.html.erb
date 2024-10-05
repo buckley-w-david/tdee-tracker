@@ -1,0 +1,20 @@
+<ul>
+  <% foods.each do |food| %>
+    <li
+      class="food-result"
+      data-action="click->food-search#selectFood"
+      data-food-name="<%= food[:food_name] %>"
+      data-food-energy="<%= food[:food_kilocalories] %>"
+      data-food-quantity="<%= food[:food_quantity] %>"
+      data-food-unit="<%= food[:food_unit] %>"
+      data-food-id="<%= food[:food_id] %>"
+
+      data-quantity="<%= food[:quantity] %>"
+      data-unit="<%= food[:unit] %>"
+    >
+      <a href="#">
+        <%= food[:food_name] %> - <%= food[:food_kilocalories] %> kcal (<%= food[:food_quantity] %> <%= food[:food_unit] %>)
+      </a>
+    </li>
+  <% end %>
+</ul>

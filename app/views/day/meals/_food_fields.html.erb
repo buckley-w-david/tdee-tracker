@@ -1,0 +1,63 @@
+<div class="food row g-3 mt-1" data-meal-target="food" data-controller="food food-search" data-suggestion-url="<%= food_search_path %>" data-action="focusin@document->food-search#hideResults click@document->food-search#hideResults" data-compatibility-matrix="<%= Food::COMPATIBLE_UNITS.to_json %>">
+  <%= food.hidden_field(:food_id, "data-food-search-target" => "foodId",) %>
+  <%= food.hidden_field(:_destroy, value: false, "data-meal-target" => "destroy", class: "destroy") %>
+
+  <div class="col-auto">
+    <%= food.text_field(
+      :food_name,
+      placeholder: "Name",
+      value: food.object&.food&.name,
+      required: true,
+      "data-action" => "keyup->food-search#suggestion focusin->food-search#showResults",
+      "data-food-search-target" => "foodName input",
+      class: "form-control"
+    )%>
+  </div>
+  <div class="autocomplete-results border rounded" data-food-search-target="results" data-query="<%= food.object&.food&.name %>" hidden></div>
+  <div class="col-auto d-flex">
+    <%= food.number_field(
+      :quantity,
+      placeholder: "Quantity",
+      required: true,
+      class: "form-control"
+    ) %>
+    <%= food.select(
+      :unit,
+      Food.units,
+      { disabled: food.object&.food&.unit.nil? ? [] : Food.units.excluding(food.object.food.compatible_units.map(&:to_s)).values, selected: Food.units[food.object&.unit] },
+      class: "form-select",
+      "data-food-target" => "entryUnit",
+    ) %>
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-secondary" data-action="click->meal#removeFood">Remove</button>
+  </div>
+  <% hide = hide_init ? "hidden" : "" %>
+  <div class="create-food border rounded p-3" data-food-search-target="foodInit" <%= hide %>>
+    <p class="fw-semibold">New food</p>
+    <%= food.label(:food_kilocalories, "Energy (kcal)", class: "form-label") %>
+    <%= food.number_field(
+      :food_kilocalories,
+      value: food.object&.food&.kilocalories,
+      class: "form-control",
+      "data-food-search-target" => "foodEnergy",
+    ) %>
+    <%= food.label(:food_quantity, "Quantity", class: "form-label") %>
+    <%= food.number_field(
+      :food_quantity,
+      value: food.object&.food&.quantity,
+      class: "form-control",
+      "data-food-search-target" => "foodQuantity",
+    ) %>
+    <%= food.label(:food_unit, "Unit", class: "form-label") %>
+    <%= food.select(
+      :food_unit,
+      Food.units,
+      { selected: food.object&.food&.unit },
+      class: "form-select",
+      "data-food-search-target" => "foodUnit",
+      "data-food-target" => "foodUnit",
+      "data-action" => "change->food#updateUnit"
+    ) %>
+  </div>
+</div>

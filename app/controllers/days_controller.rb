@@ -9,13 +9,18 @@ class DaysController < ApplicationController
       date: @date
     )
 
+    stats_start = @date - 45.days
+
+    # FIXME: This is duplicated in the stats controller
+    #        DRY it up
     @tdee_data = @current_user
-      .days
+      .days.where(date: stats_start..@date)
       .order(date: :asc)
       .pluck(:date, :total_daily_expended_energy)
 
+
     @kilocalories = @current_user
-      .days
+      .days.where(date: stats_start..@date)
       .order(date: :asc)
       .pluck(:date, :kilocalories)
 
@@ -30,20 +35,50 @@ class DaysController < ApplicationController
       .order(date: :asc)
       .pluck(:date, :weight)
 
-    # TODO: Revamp TDEE calculation to use EMA of weights intead of linear fit
-    @ema = TechnicalAnalysis::Ema.calculate(@weight.map { |d, t| { date_time: d, value: t } }).map do |ema|
+    @ema = TechnicalAnalysis::Ema.calculate(@weight.map { |d, t| { date_time: d, value: t } }, period: 14).map do |ema|
       [ ema.date_time, ema.ema ]
     end.to_h
 
-    if @current_user.goal
-      tdee = @day.total_daily_expended_energy
-      delta_w = @current_user.goal.change_per_week
-      change_per_day = (delta_w / 7) * 3500 # In kilocalories
+    # Experimental TDEE calculation using EMA of weights
+    # It takes a _lot_ of data before this starts giving results
+    kcal_avg = Day.connection.execute(<<-SQL)
+      SELECT date, (
+        SELECT avg(kilocalories)
+        FROM days d2
+          WHERE d2.date BETWEEN date(d.date, '-22 days') AND date(d.date, '-1 day')
+      ) avg
+      FROM days d
+    SQL
+      .map { |row| [ row["date"].to_date, row["avg"] ] }.to_h
 
-      @target_kilocalories = if tdee
-        (tdee + change_per_day).round(0)
-      end
+    x = []
+    y = []
+
+    @ema.each do |date, ema|
+      y << ema
+      x << date
     end
+
+    x.reverse!
+    y.reverse!
+
+    @tdee_alt = []
+    x.zip(y).each_cons(21) do |xy|
+      xx, yy = xy.transpose
+
+      linefit = LineFit.new
+      linefit.setData(xx.map(&:jd), yy)
+      _, slope = linefit.coefficients
+
+      d = xx.last
+      tdee = (kcal_avg[d] - 3500*slope).to_f
+
+      @tdee_alt << [ d, tdee ]
+    end
+
+    @ema.filter! { |date, _| date >= stats_start }
+    @weight.filter! { |date, _| date >= stats_start }
+    @tdee_alt.filter! { |date, _| date >= stats_start }
   end
 
   def new
