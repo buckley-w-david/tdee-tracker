@@ -1,5 +1,6 @@
 require "csv"
 
+
 class DaysController < ApplicationController
   before_action :set_day, only: [ :edit, :update ]
 
@@ -38,6 +39,10 @@ class DaysController < ApplicationController
     @ema = TechnicalAnalysis::Ema.calculate(@weight.map { |d, t| { date_time: d, value: t } }, period: 14).map do |ema|
       [ ema.date_time, ema.ema ]
     end.to_h
+
+    if current_user.google_fit_token.present?
+      @steps_by_day = GoogleFitService.steps_by_date(current_user, stats_start, @date.end_of_day)
+    end
 
     # Experimental TDEE calculation using EMA of weights
     # It takes a _lot_ of data before this starts giving results

@@ -1,8 +1,12 @@
-@import 'bootstrap';
-@import 'bootstrap-icons';
-@import "simple_calendar";
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons';
+
+// FIXME: Figure out how to correctly import the stylesheet from the gem
+//        As-is we get a not found error without vendoring the scss file
+@import 'vendor/simple_calendar.scss';
 
 @import 'meals/food.scss';
+
 
 #flash-container {
   position: fixed;

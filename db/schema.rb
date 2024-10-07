@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_16_194419) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_05_160034) do
   create_table "days", force: :cascade do |t|
     t.integer "kilocalories"
     t.float "weight"
@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_194419) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "total_daily_expended_energy"
-    t.index [ "user_id" ], name: "index_days_on_user_id"
+    t.index ["user_id"], name: "index_days_on_user_id"
   end
 
   create_table "food_entries", force: :cascade do |t|
@@ -29,8 +29,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_194419) do
     t.float "quantity"
     t.string "unit"
     t.integer "food_id", null: false
-    t.index [ "food_id" ], name: "index_food_entries_on_food_id"
-    t.index [ "meal_id" ], name: "index_food_entries_on_meal_id"
+    t.index ["food_id"], name: "index_food_entries_on_food_id"
+    t.index ["meal_id"], name: "index_food_entries_on_meal_id"
   end
 
   create_table "foods", force: :cascade do |t|
@@ -47,7 +47,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_194419) do
     t.float "change_per_week"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "user_id" ], name: "index_goals_on_user_id"
+    t.index ["user_id"], name: "index_goals_on_user_id"
   end
 
   create_table "meals", force: :cascade do |t|
@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_194419) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "day_id" ], name: "index_meals_on_day_id"
+    t.index ["day_id"], name: "index_meals_on_day_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -68,6 +68,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_16_194419) do
     t.datetime "withings_expires_at"
     t.string "withings_user_id"
     t.datetime "withings_last_updated_at"
+    t.text "google_fit_token"
   end
 
   add_foreign_key "days", "users"

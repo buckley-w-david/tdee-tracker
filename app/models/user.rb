@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :food_entries, through: :meals
   has_many :foods, through: :food_entries
 
+  serialize :google_fit_token, coder: JSON
+
   # I am not sure I like sticking this here...
   def withings_client
     if Time.current >= withings_expires_at

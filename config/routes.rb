@@ -37,5 +37,8 @@ Rails.application.routes.draw do
 
   get "withings", controller: "withings", action: "register"
 
+  get "google/connect", controller: "google", action: "connect"
+  get "google/oauth", controller: "google", action: "register"
+
   get "stats", controller: "stats", action: "index"
 end

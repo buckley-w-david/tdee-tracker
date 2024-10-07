@@ -81,3 +81,5 @@ gem "pagy", "~> 9.0"
 gem "rack-mini-profiler", "~> 3.3"
 
 gem "oga", "~> 3.4"
+
+gem "google-apis-fitness_v1", "~> 0.22.0"

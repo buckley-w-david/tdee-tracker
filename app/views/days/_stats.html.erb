@@ -33,4 +33,17 @@
       download: true,
     ) %>
   </div>
+  <% if @steps_by_day.present? %>
+    <div class="border rounded p-3 mt-2">
+      <%= column_chart(
+        [{
+          name: "Steps",
+          data: @steps_by_day,
+        }],
+        min: nil,
+        ytitle: "Steps",
+        download: true,
+      ) %>
+    </div>
+  <% end %>
 <% end %>
