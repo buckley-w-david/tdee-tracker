@@ -32,6 +32,8 @@ class DaysController < ApplicationController
       #       This means missed days will result in a measure of n+m days (n = period length, m = missed days)
       #       This has implications on using it to calculate TDEE since it will be difficult to reason about number of kcals over that same period
       #       We could replace missed days with a straight line approximation between the most recent past measure, and the most recent future measure
+      #       These missing days also likely skew the calculation. It looks like there are are bigger drops in weight since 2 days of progress are compressed into 1
+      #       Missing more than 1 day in a row would be even worse
       .where.not(weight: nil)
       .order(date: :asc)
       .pluck(:date, :weight)
@@ -40,9 +42,13 @@ class DaysController < ApplicationController
       [ ema.date_time, ema.ema ]
     end.to_h
 
-    if current_user.google_fit_token.present?
-      @steps_by_day = GoogleFitService.steps_by_date(current_user, stats_start, @date.end_of_day)
-    end
+    # 2024-10-12
+    # When an app is in testing mode, the tokens automatically expire after 7 days
+    # Because of this, paired with the requirement that production apps use https urls
+    # I have decided to just comment out the google fit integration
+    # if current_user.google_fit_token.present?
+    #   @steps_by_day = GoogleFitService.steps_by_date(current_user, stats_start, @date.end_of_day)
+    # end
 
     # Experimental TDEE calculation using EMA of weights
     # It takes a _lot_ of data before this starts giving results
@@ -135,7 +141,7 @@ class DaysController < ApplicationController
     end
   end
 
-  def import_values
+  def import_stats
     file = File.open(params[:file])
     format = params[:date_format] || "%m/%d/%Y"
 
@@ -153,6 +159,18 @@ class DaysController < ApplicationController
       end
 
       day.save
+    end
+  end
+
+  def import_loseit
+    file = File.open(params[:file])
+
+    importer = Import::LoseitEntriesService.new(@current_user)
+
+    CSV.foreach(file, headers: true) do |row|
+      next if row["Deleted"] == "1"
+
+      importer.import(row)
     end
   end
 

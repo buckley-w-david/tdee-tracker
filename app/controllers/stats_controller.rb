@@ -26,9 +26,9 @@ class StatsController < ApplicationController
       .order(date: :asc)
       .pluck(:date, :weight)
 
-    if current_user.google_fit_token.present?
-      @steps_by_day = GoogleFitService.steps_by_date(current_user, stats_start || current_user.days.first.date, @date.end_of_day)
-    end
+    # if current_user.google_fit_token.present?
+    #   @steps_by_day = GoogleFitService.steps_by_date(current_user, stats_start || current_user.days.first.date, @date.end_of_day)
+    # end
 
     # TODO: Revamp TDEE calculation to use EMA of weights intead of linear fit
     @ema = TechnicalAnalysis::Ema.calculate(@weight.map { |d, t| { date_time: d, value: t } }, period: 14).map do |ema|

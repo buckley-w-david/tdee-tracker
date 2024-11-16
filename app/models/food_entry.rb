@@ -8,6 +8,11 @@ class FoodEntry < ApplicationRecord
   # Currently only the same unit is allowed
   validate :unit_matches_food
 
+  def kilocalories
+    factor = CONVERSION_FACTORS[unit.to_sym][food.unit.to_sym]
+    (quantity * factor / food.quantity)*food.kilocalories
+  end
+
   private
 
   def unit_matches_food

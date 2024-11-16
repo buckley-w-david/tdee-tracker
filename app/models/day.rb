@@ -12,13 +12,7 @@ class Day < ApplicationRecord
   has_many :food_entries, through: :meals
 
   def meal_kilocalories
-    food_entries
-      .joins(:food)
-      .pluck(:"food_entries.quantity", :"food_entries.unit", :"foods.quantity", :"foods.unit", :"foods.kilocalories").sum do |fe_quantity, fe_unit, f_quantity, f_unit, f_kilocalories|
-      factor = Food::CONVERSION_FACTORS[fe_unit.to_sym][f_unit.to_sym]
-
-      (fe_quantity * factor / f_quantity)*f_kilocalories
-    end
+    food_entries.includes(:food).sum(&:kilocalories)
   end
 
   class << self

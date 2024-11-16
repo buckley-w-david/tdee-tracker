@@ -1,4 +1,15 @@
-<%= form_tag import_days_path, method: :post, multipart: true do %>
-  <%= file_field_tag :file, accept: ".csv" %>
-  <%= submit_tag '⚙️ Import' %>
-<% end %>
+<div>
+  <h2>Import Days</h2>
+  <%= form_tag import_stats_days_path, method: :post, multipart: true do %>
+    <%= file_field_tag :file, accept: ".csv" %>
+    <%= submit_tag 'Import' %>
+  <% end %>
+</div>
+
+<div>
+  <h2>Import Meals (loseit daily export)</h2>
+  <%= form_tag import_loseit_days_path, method: :post, multipart: true do %>
+    <%= file_field_tag :file, accept: ".csv" %>
+    <%= submit_tag 'Import' %>
+  <% end %>
+</div>

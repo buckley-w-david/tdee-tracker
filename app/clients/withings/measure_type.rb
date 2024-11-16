@@ -28,6 +28,7 @@ module Withings::MeasureType
   INTRACELLULARWATER = 169
   VISCERALFAT = 170
   FATMASS = 174
-  MUSCLEMASS = 175
+  # Not sure why this is different from the other MUSCLEMASS above
+  # MUSCLEMASS = 175
   ELECTRODERMALACTIVITY = 196
 end

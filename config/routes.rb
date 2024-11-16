@@ -15,7 +15,8 @@ Rails.application.routes.draw do
   resources :days do
     collection do
       get "import"
-      post "import", action: "import_values"
+      post "import/stats", action: "import_stats"
+      post "import/loseit", action: "import_loseit"
       get "by_date/:date", action: "by_date", as: :by_date
     end
 
