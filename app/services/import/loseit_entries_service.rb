@@ -23,7 +23,7 @@ module Import
       meal = day.meals.find_or_initialize_by(name: meal_name)
 
       quantity = row["Quantity"].to_f
-      normalized_kilocalories = row["Calories"].to_f / quantity
+      normalized_kilocalories = (row["Calories"].to_f / quantity).round(2)
 
       food = Food.find_or_initialize_by(
         name: row["Name"],
@@ -32,9 +32,7 @@ module Import
         kilocalories: normalized_kilocalories,
       )
 
-      debugger if food.quantity == 0
-
-      entry = meal.food_entries.build(
+      entry = meal.food_entries.find_or_initialize_by(
         quantity: quantity,
         unit: unit,
         food: food,
