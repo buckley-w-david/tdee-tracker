@@ -164,14 +164,11 @@ class DaysController < ApplicationController
 
   def import_loseit
     file = File.open(params[:file])
+    blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: SecureRandom.uuid)
 
-    importer = Import::LoseitEntriesService.new(@current_user)
+    Import::LoseitEntriesJob.perform_later(@current_user.id, blob.id)
 
-    CSV.foreach(file, headers: true) do |row|
-      next if row["Deleted"] == "1"
-
-      importer.import(row)
-    end
+    redirect_to(root_path, flash: { success: "Importing LoseIt entries" })
   end
 
   private
