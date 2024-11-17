@@ -1,7 +1,11 @@
 <%= form_with(model: day) do |form| %>
   <div class="mb-3">
     <%= form.label(:kilocalories, "Kilocalories", class: "form-label") %>
-    <%= form.number_field(:kilocalories, class: "form-control") %>
+    <% if day.kilocalories? %>
+      <%= form.number_field(:kilocalories, class: "form-control") %>
+    <% else %>
+      <%= form.number_field(:kilocalories, class: "form-control", value: day.meal_kilocalories) %>
+    <% end %>
   </div>
   <div class="mb-3">
     <%= form.label(:weight, "Weight", class: "form-label") %>
