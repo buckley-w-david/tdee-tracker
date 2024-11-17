@@ -1,6 +1,8 @@
-class FetchWithingsJob < ApplicationJob
-  def perform
-    User.where.not(withings_refresh_token: nil).each do |user|
+module Import
+  class FetchWithingsJob < ApplicationJob
+    def perform(user_id)
+      user = User.find(user_id)
+
       client = user.withings_client
 
       options = {

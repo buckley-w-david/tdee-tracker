@@ -5,16 +5,16 @@ require "csv"
 
 module Import
   class ScanLoseitEmailJob < ApplicationJob
-    def perform
+    def perform(user_id)
+      user = User.find(user_id)
+
+      # TODO: These need to pull from a user specific data source
       imap = Net::IMAP.new(ENV["EMAIL_HOST"], port: 993, ssl: true)
       imap.login(ENV["EMAIL_USERNAME"], ENV["EMAIL_PASSWORD"])
 
       # TODO: Probably shouldn't hardcode this
       imap.select("Automation/loseit")
 
-      # TODO: How to do proper user lookup?
-      #       Will probably need to set up a new table and use that instead of environment variables
-      user = User.first
       importer = Import::LoseitEntriesService.new(user)
 
       imap.uid_search([ "NOT", "SEEN" ]).each do |uid|
