@@ -7,15 +7,12 @@
       },
       {
         name: "TDEE",
-        data: @tdee_data,
-      },
-      {
-        name: "TDEE (ALT)",
-        data: @tdee_alt,
+        data: @tdee,
       }],
       min: nil,
       ytitle: "TDEE (kcal)",
       download: true,
+      id: "tdee_chart",
     ) %>
   </div>
   <div class="border rounded p-3 mt-2">
@@ -31,6 +28,7 @@
       min: nil,
       ytitle: "Weight (lbs)",
       download: true,
+      id: "weight_chart",
     ) %>
   </div>
   <% if @steps_by_day.present? %>
@@ -43,6 +41,7 @@
         min: nil,
         ytitle: "Steps",
         download: true,
+        id: "steps_chart",
       ) %>
     </div>
   <% end %>

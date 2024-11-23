@@ -10,86 +10,12 @@ class DaysController < ApplicationController
       date: @date
     )
 
-    stats_start = @date - 45.days
+    stats = Stats.stats(@current_user, last: 45)
 
-    # FIXME: This is duplicated in the stats controller
-    #        DRY it up
-    @tdee_data = @current_user
-      .days.where(date: stats_start..@date)
-      .order(date: :asc)
-      .pluck(:date, :total_daily_expended_energy)
-
-
-    @kilocalories = @current_user
-      .days.where(date: stats_start..@date)
-      .order(date: :asc)
-      .pluck(:date, :kilocalories)
-
-    @weight = @current_user
-      .days
-      # TODO: Think about what the implications of a missed weigh in are
-      #       The EMA implementation cannot handle `nil` data, and its "period" is measured in number of data points, not days.
-      #       This means missed days will result in a measure of n+m days (n = period length, m = missed days)
-      #       This has implications on using it to calculate TDEE since it will be difficult to reason about number of kcals over that same period
-      #       We could replace missed days with a straight line approximation between the most recent past measure, and the most recent future measure
-      #       These missing days also likely skew the calculation. It looks like there are are bigger drops in weight since 2 days of progress are compressed into 1
-      #       Missing more than 1 day in a row would be even worse
-      .where.not(weight: nil)
-      .order(date: :asc)
-      .pluck(:date, :weight)
-
-    @ema = TechnicalAnalysis::Ema.calculate(@weight.map { |d, t| { date_time: d, value: t } }, period: 14).map do |ema|
-      [ ema.date_time, ema.ema ]
-    end.to_h
-
-    # 2024-10-12
-    # When an app is in testing mode, the tokens automatically expire after 7 days
-    # Because of this, paired with the requirement that production apps use https urls
-    # I have decided to just comment out the google fit integration
-    # if current_user.google_fit_token.present?
-    #   @steps_by_day = GoogleFitService.steps_by_date(current_user, stats_start, @date.end_of_day)
-    # end
-
-    # Experimental TDEE calculation using EMA of weights
-    # It takes a _lot_ of data before this starts giving results
-    kcal_avg = Day.connection.execute(<<-SQL)
-      SELECT date, (
-        SELECT avg(kilocalories)
-        FROM days d2
-          WHERE d2.date BETWEEN date(d.date, '-22 days') AND date(d.date, '-1 day')
-      ) avg
-      FROM days d
-    SQL
-      .map { |row| [ row["date"].to_date, row["avg"] ] }.to_h
-
-    x = []
-    y = []
-
-    @ema.each do |date, ema|
-      y << ema
-      x << date
-    end
-
-    x.reverse!
-    y.reverse!
-
-    @tdee_alt = []
-    x.zip(y).each_cons(21) do |xy|
-      xx, yy = xy.transpose
-
-      linefit = LineFit.new
-      linefit.setData(xx.map(&:jd), yy)
-      _, slope = linefit.coefficients
-
-      d = xx.last
-      tdee = (kcal_avg[d] - 3500*slope).to_f
-
-      @tdee_alt << [ d, tdee ]
-    end
-
-    @ema.filter! { |date, _| date >= stats_start }
-    @weight.filter! { |date, _| date >= stats_start }
-    @tdee_alt.filter! { |date, _| date >= stats_start }
+    @weight = stats.weight
+    @kilocalories = stats.kilocalories
+    @tdee = stats.tdee
+    @ema = stats.ema
   end
 
   def new

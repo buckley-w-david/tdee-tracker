@@ -7,7 +7,7 @@ class CalendarController < ApplicationController
     previous_month = start_date.advance(months: -1)
     next_month = start_date.advance(months: 1)
 
-    @start = @current_user.days.where(date: start_date.beginning_of_month..start_date.end_of_month).order(:date).first
+    @start = @current_user.days.where(date: start_date.beginning_of_month..start_date.end_of_month).where.not(weight: nil).order(:date).first
 
     days = @current_user
       .days

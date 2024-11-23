@@ -1,42 +1,13 @@
 class StatsController < ApplicationController
+  TDEE_PERIOD = 49
+
   def index
-    @date = Time.current.to_date
-    if params[:last]
-      stats_start = @date - params[:last].to_i.days
-    end
+    stats = Stats.stats(@current_user, last: params[:last]&.to_i)
 
-    @tdee_data = @current_user
-      .days.where(date: stats_start..@date)
-      .order(date: :asc)
-      .pluck(:date, :total_daily_expended_energy)
-
-    @kilocalories = @current_user
-      .days.where(date: stats_start..@date)
-      .order(date: :asc)
-      .pluck(:date, :kilocalories)
-
-    @weight = @current_user
-      .days
-      # TODO: Think about what the implications of a missed weigh in are
-      #       The EMA implementation cannot handle `nil` data, and its "period" is measured in number of data points, not days.
-      #       This means missed days will result in a measure of n+m days (n = period length, m = missed days)
-      #       This has implications on using it to calculate TDEE since it will be difficult to reason about number of kcals over that same period
-      #       We could replace missed days with a straight line approximation between the most recent past measure, and the most recent future measure
-      .where.not(weight: nil)
-      .order(date: :asc)
-      .pluck(:date, :weight)
-
-    # if current_user.google_fit_token.present?
-    #   @steps_by_day = GoogleFitService.steps_by_date(current_user, stats_start || current_user.days.first.date, @date.end_of_day)
-    # end
-
-    # TODO: Revamp TDEE calculation to use EMA of weights intead of linear fit
-    @ema = TechnicalAnalysis::Ema.calculate(@weight.map { |d, t| { date_time: d, value: t } }, period: 14).map do |ema|
-      [ ema.date_time, ema.ema ]
-    end.to_h
-
-    @ema.filter! { |date, _| stats_start.nil? || date >= stats_start }
-    @weight.filter! { |date, _| stats_start.nil? || date >= stats_start }
+    @weight = stats.weight
+    @kilocalories = stats.kilocalories
+    @tdee = stats.tdee
+    @ema = stats.ema
 
     respond_to do |format|
       format.turbo_stream do
