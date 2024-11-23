@@ -88,6 +88,8 @@ module Stats extend self
       linefit.setData(x, y)
       _, slope = linefit.coefficients
 
+      # FIXME: 3500kcal = 1lbs of fat loss is an outdated rule of thumb
+      #        https://pmc.ncbi.nlm.nih.gov/articles/PMC4035446/
       [ day[0], (calories - 3500*slope).to_f ]
     end
 
