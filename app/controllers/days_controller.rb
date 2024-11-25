@@ -5,12 +5,12 @@ class DaysController < ApplicationController
   before_action :set_day, only: [ :edit, :update ]
 
   def index
-    @date = Time.current.to_date
+    @date = params[:date]&.to_date || Time.current.to_date
     @day = Day.find_or_initialize_by(
       date: @date
     )
 
-    stats = Stats.stats(@current_user, last: 45)
+    stats = Stats.stats(@current_user, start_date: @date.advance(days: -45), end_date: @date)
 
     @weight = stats.weight
     @kilocalories = stats.kilocalories

@@ -2,7 +2,9 @@ class StatsController < ApplicationController
   TDEE_PERIOD = 49
 
   def index
-    stats = Stats.stats(@current_user, last: params[:last]&.to_i)
+    start_date = Time.current.advance(days: -params[:last].to_i).to_date if params[:last].present?
+    end_date = Time.current.to_date
+    stats = Stats.stats(@current_user, start_date:, end_date:)
 
     @weight = stats.weight
     @kilocalories = stats.kilocalories
