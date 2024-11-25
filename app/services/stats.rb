@@ -53,7 +53,7 @@ module Stats extend self
     days.each do |d|
       d[2] = total_average if d[2].nil?
     end
-    days[-1][2] = nil # Kilocalories for the last day are undetermined (in progress), we don't want our estimate
+    days[-1][2] = nil # Kilocalories for the last day are undetermined (in progress), throw away the estimate
 
     # At this point, days is now a continious range of days with both kilocalorie info and weight info for every day
     # That makes further calculation much easier

@@ -1,6 +1,6 @@
-<div class="my-3" data-controller="stats-toggle">
+<div class="my-3" data-controller="stats-toggle" data-start_date="<%= @date.advance(days: -45) %>" data-end_date="<%= @date %>">
   <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" data-action="stats-toggle#toggle" checked >
+    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" data-action="stats-toggle#toggle" checked>
     <label class="form-check-label" for="flexSwitchCheckDefault" data-stats-toggle-target="label">Last 45 days</label>
   </div>
 

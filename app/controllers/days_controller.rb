@@ -9,6 +9,7 @@ class DaysController < ApplicationController
     @day = Day.find_or_initialize_by(
       date: @date
     )
+    @show_points = true
 
     stats = Stats.stats(@current_user, start_date: @date.advance(days: -45), end_date: @date)
 
