@@ -5,10 +5,12 @@
     <% yesterday = @days[date.yesterday] %>
 
     <div>
-      <% if date.day == 1 %>
-        <span><%= date.strftime("%B %d") %></span>
-      <% else %>
-        <span><%= date.strftime("%d") %></span>
+      <%= link_to(days_path(date: date), class: "text-decoration-none text-black") do %>
+        <% if date.day == 1 %>
+          <span><%= date.strftime("%B %d") %></span>
+        <% else %>
+          <span><%= date.strftime("%d") %></span>
+        <% end %>
       <% end %>
     </div>
 
