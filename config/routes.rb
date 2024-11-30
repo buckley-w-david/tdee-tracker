@@ -9,14 +9,14 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  # Defines the root path route ("/")
   root "days#index"
+
+  resource :user, path: "profile", only: %i[edit update]
+
+  resource :import, only: %i[new create]
 
   resources :days do
     collection do
-      get "import"
-      post "import/stats", action: "import_stats"
-      post "import/loseit", action: "import_loseit"
       get "by_date/:date", action: "by_date", as: :by_date
     end
 

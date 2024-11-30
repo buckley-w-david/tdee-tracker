@@ -1,6 +1,5 @@
 require "csv"
 
-
 class DaysController < ApplicationController
   before_action :set_day, only: [ :edit, :update ]
 
@@ -66,36 +65,6 @@ class DaysController < ApplicationController
     else
       redirect_to(edit_day_path(@day))
     end
-  end
-
-  def import_stats
-    file = File.open(params[:file])
-    format = params[:date_format] || "%m/%d/%Y"
-
-    CSV.foreach(file, headers: true) do |row|
-      next if row["Weight"].blank? && row["Kilocalories"].blank?
-
-      day = @current_user.days.find_or_initialize_by(date: Date.strptime(row["Date"], format))
-
-      unless row["Weight"].blank?
-        day.weight = row["Weight"].to_f
-      end
-
-      unless row["Kilocalories"].blank?
-        day.kilocalories = row["Kilocalories"].to_i
-      end
-
-      day.save
-    end
-  end
-
-  def import_loseit
-    file = File.open(params[:file])
-    blob = ActiveStorage::Blob.create_and_upload!(io: file, filename: SecureRandom.uuid)
-
-    Import::LoseitEntriesJob.perform_later(@current_user.id, blob.id)
-
-    redirect_to(root_path, flash: { success: "Importing LoseIt entries" })
   end
 
   private

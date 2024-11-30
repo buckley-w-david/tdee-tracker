@@ -1,0 +1,9 @@
+<%= form_with(model: @current_user, url: user_path) do |form| %>
+  <div class="mb-3">
+    <%= form.label(:username, class: "form-label" )%>
+    <%= form.text_field(:username, class: "form-control")%>
+    <div id="usernameHelp" class="form-text">To automatically import Lose It data, this must match your Lose It username</div>
+  </div>
+
+  <%= form.submit("Save") %>
+<% end %>

@@ -10,6 +10,8 @@ class User < ApplicationRecord
 
   serialize :google_fit_token, coder: JSON
 
+  validates_uniqueness_of :username
+
   # I am not sure I like sticking this here...
   def withings_client
     if Time.current >= withings_expires_at

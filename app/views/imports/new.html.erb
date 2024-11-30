@@ -1,0 +1,17 @@
+<div>
+  <h2>Import Days</h2>
+  <%= form_tag import_path, method: :post, multipart: true do %>
+    <%= hidden_field_tag :kind, 'days' %>
+    <%= file_field_tag :file, accept: ".csv" %>
+    <%= submit_tag 'Import' %>
+  <% end %>
+</div>
+
+<div>
+  <h2>Import Meals (loseit daily export)</h2>
+  <%= form_tag import_path, method: :post, multipart: true do %>
+    <%= hidden_field_tag :kind, 'meals' %>
+    <%= file_field_tag :file, accept: ".csv" %>
+    <%= submit_tag 'Import' %>
+  <% end %>
+</div>
