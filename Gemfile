@@ -72,7 +72,7 @@ gem "chartkick", "~> 5.1"
 
 gem "technical-analysis", "~> 0.2.4"
 
-gem "solid_queue", "~> 0.8.2"
+gem "solid_queue", "~> 1.1.3"
 
 gem "simple_calendar", "~> 3.0"
 
