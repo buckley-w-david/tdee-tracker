@@ -25,7 +25,7 @@
         <% delta = (day.weight - yesterday.weight).round(1) %>
         <span class="text-secondary align-self-center" style="font-size: 12px">(<%= sign(delta) %><%= delta.abs %> lbs)</span>
       <% end %>
-      <% bow = @days[date.beginning_of_week] %>
+      <% bow = @days[date.beginning_of_week - 1.day] %>
       <% if date.end_of_week == date && day&.weight && bow&.weight %>
         <!-- Show the weeks delta at the end of the week -->
         <% delta = (day.weight - bow.weight).round(1) %>

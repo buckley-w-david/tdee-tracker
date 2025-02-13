@@ -1,0 +1,13 @@
+<div class="rounded border p-3 mb-3">
+  <h2>Withings</h2>
+  <p>You can automatically import your weight from a <a href="https://www.withings.com" target="_blank">Withings smart scale</a>.</p>
+  <p class="text-secondary">Weight data is syncronized once per day.</p>
+
+  <% if @current_user.withings_refresh_token.present? %>
+    <p>Last sync: <span class="fw-semibold"><%= @current_user.withings_last_updated_at %></span></p>
+    <p class="text-success">Your Withings account is connected.</p>
+    <%= link_to("Disconnect Withings", withings_revoke_path, method: :delete, class: "btn btn-danger") %>
+  <% else %>
+    <%= link_to("Connect Withings", withings_authorize_path, class: "btn btn-primary") %>
+  <% end %>
+</div>

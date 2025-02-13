@@ -1,4 +1,6 @@
 class Withings::Client
+  REDIRECT_URI = "http://tdee.fizzbuzz.ca/integrations/withings/register"
+
   def initialize(access_token)
     @client = Faraday.new("https://wbsapi.withings.net") do |conn|
       conn.request :authorization, "Bearer", access_token
@@ -22,7 +24,7 @@ class Withings::Client
 
   class << self
     # https://developer.withings.com/api-reference#tag/oauth2
-    def generate_tokens(code, state)
+    def generate_tokens(code)
       response = Faraday.post("https://wbsapi.withings.net/v2/oauth2") do |req|
         req.headers["Content-Type"] = "application/x-www-form-urlencoded"
         req.body = URI.encode_www_form({
@@ -31,7 +33,7 @@ class Withings::Client
           client_secret:,
           grant_type: "authorization_code",
           code:,
-          redirect_uri: "http://tdee.fizzbuzz.ca/withings"
+          redirect_uri: REDIRECT_URI
         })
       end
 
@@ -67,6 +69,42 @@ class Withings::Client
         refresh_token: body.dig("body", "refresh_token"),
         expires_at: Time.current + body.dig("body", "expires_in")
       }
+    end
+
+    # https://developer.withings.com/api-reference/#tag/oauth2/operation/oauth2-revoke
+    def revoke_tokens(user_id)
+      params = {
+        "action" => "getnonce",
+        "client_id" => client_id,
+        "timestamp" => Time.current.to_i
+      }
+      params["signature"] = signature(**params)
+      response = Faraday.post("https://wbsapi.withings.net/v2/signature") do |req|
+        req.headers["Content-Type"] = "application/x-www-form-urlencoded"
+        req.body = URI.encode_www_form(params)
+      end
+
+      body = JSON.parse(response.body)
+      process_status!(body["status"])
+
+      nonce = body.dig("body", "nonce")
+      params = {
+        "action" => "revoke",
+        "client_id" => client_id,
+        "nonce" => nonce,
+        "userid" => user_id
+      }
+      params["signature"] = signature(action: "revoke", client_id: client_id, nonce: nonce)
+
+      response = Faraday.post("https://wbsapi.withings.net/v2/oauth2") do |req|
+        req.headers["Content-Type"] = "application/x-www-form-urlencoded"
+        req.body = URI.encode_www_form(params)
+      end
+
+      body = JSON.parse(response.body)
+      process_status!(body["status"])
+
+      true
     end
 
     class WithingsError < StandardError
@@ -151,6 +189,12 @@ class Withings::Client
       when 9000 then raise WithingsError, "An error occurred"
       when 10000 then raise WithingsError, "An error occurred"
       end
+    end
+
+    def signature(**args)
+      keys = args.keys.sort
+      s = keys.map { |k| args[k] }.join(",")
+      hmac = OpenSSL::HMAC.hexdigest("SHA256", client_secret, s)
     end
 
     private

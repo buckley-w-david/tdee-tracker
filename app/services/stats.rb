@@ -1,3 +1,5 @@
+require "line_fit"
+
 module Stats extend self
   TDEE_PERIOD = 49
 

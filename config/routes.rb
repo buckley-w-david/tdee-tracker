@@ -36,10 +36,24 @@ Rails.application.routes.draw do
 
   get "calendar", controller: "calendar", action: "index"
 
-  get "withings", controller: "withings", action: "register"
+  resource "integrations"
 
-  get "google/connect", controller: "google", action: "connect"
-  get "google/oauth", controller: "google", action: "register"
+  scope "/integrations/withings", as: "withings" do
+    get "authorize", action: "authorize", controller: "integrations/withings"
+    get "register", action: "register", controller: "integrations/withings"
+    get "revoke", action: "revoke", controller: "integrations/withings"
+  end
+
+  scope "/integrations/google", as: "google" do
+    get "connect", action: "connect", controller: "integrations/google"
+    get "oauth", action: "register", controller: "integrations/google"
+  end
 
   get "stats", controller: "stats", action: "index"
+
+  resources :workouts do
+    collection do
+      get "by_date/:date", action: "by_date", as: :by_date
+    end
+  end
 end

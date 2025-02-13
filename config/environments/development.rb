@@ -80,5 +80,5 @@ Rails.application.configure do
   # config.generators.apply_rubocop_autocorrect_after_generate!
   config.hosts << "tdee.fizzbuzz.ca"
 
-config.allow_concurrency = true
+  config.allow_concurrency = true
 end

@@ -24,8 +24,12 @@ module Import
         # feels like it hasn't been updated in years
         message_text = parts.attr["BODY[1]"]
         document = Nokogiri::HTML.parse(message_text)
+
         eoi = document.xpath('//*[contains(text(), "Food calories consumed")]').first
         kilocalories = eoi.next_element.text.gsub(/[^0-9]/, "").to_i
+
+        eoi = document.xpath('//*[contains(text(), "Today\'s Weight")]').first
+        weight = eoi.next_element.text.to_f
 
         # It is hilarious that this works
         header = document.xpath("//h3").first
@@ -55,6 +59,10 @@ module Import
 
         day = user.days.find_or_initialize_by(date: date)
         day.kilocalories = kilocalories
+
+        # Don't love having to check this, but such is life. I don't want to overwrite the value synced from Withings
+        day.weight = weight unless user.withings_refresh_token?
+
         day.save!
       rescue => e
         Rails.logger.error "Error processing email: #{uid} - #{e}"

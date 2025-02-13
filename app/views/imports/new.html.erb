@@ -1,17 +1,40 @@
-<div>
-  <h2>Import Days</h2>
+<h1>Import Lose it Data</h2>
+<div class="border rounded mb-3 p-3">
+  <details class="mb-2">
+    <summary>Instructions</summary>
+    <p>Lose It has the <a href="https://help.loseit.com/hc/en-us/articles/115007307527-How-to-Download-Weight-Logs-and-Data#h_01J3DRN7PAVPVQKFHZ2FSH7QZ9" target="_blank">following guide</a> on how to download your data.</p>
+
+    <p class="h4">Weight</p>
+    <p>This can either be the export from the <a href="https://www.loseit.com/#Insights:Weight%5EWeight" target="_blank">Weight</a> page referenced in the above guide, or the <code>weights.csv</code> file from your <a href="https://loseit.com/export/data" target="_blank">whole account export</a>.</p>
+
+    <p class="h4">Kilocalories</p>
+    <p>This can either by the export from the <a href="https://www.loseit.com/#Insights:Food%20Calories%5EFood%20Calories" target="_blank">Food Calories</a> page, or the <code>daily-calorie-summary.csv</code> file from your <a href="https://loseit.com/export/data" target="_blank">whole account export</a>.</p>
+
+    <p class="h4">Meals</p>
+    <p>This can either be the export from the <a href="https://www.loseit.com/#Insights:Daily%20Summary%5EDaily%20Summary" target="_blank">Daily</a> or <a href="https://www.loseit.com/#Insights:Weekly%20Summary%5EWeekly%20Summary" target="_blank">Weekly</a> Summary pages, or the <code>food-logs.csv</code> file from your <a href="https://loseit.com/export/data" target="_blank">whole account export</a>.</p>
+  </details>
   <%= form_tag import_path, method: :post, multipart: true do %>
-    <%= hidden_field_tag :kind, 'days' %>
-    <%= file_field_tag :file, accept: ".csv" %>
-    <%= submit_tag 'Import' %>
+    <select name="kind" class="form-select mb-3">
+      <option value="weight">Weight</option>
+      <option value="kilocalories">Kilocalories</option>
+      <option value="meals">Meals (daily export)</option>
+    </select>
+    <div class="mb-3">
+      <%= label_tag(:file, "CSV", class: "form-label")%>
+      <%= file_field_tag(:file, accept: ".csv", class: "form-control")%>
+    </div>
+    <%= submit_tag('Import', class: "btn btn-primary") %>
   <% end %>
 </div>
 
+<hr>
+
 <div>
-  <h2>Import Meals (loseit daily export)</h2>
-  <%= form_tag import_path, method: :post, multipart: true do %>
-    <%= hidden_field_tag :kind, 'meals' %>
-    <%= file_field_tag :file, accept: ".csv" %>
-    <%= submit_tag 'Import' %>
-  <% end %>
+  <p class="fw-semibold">Interested in automatic imports?</p>
+  <p>
+    If your usename matches your Lose It username, you can set up automatic imports.<br>
+    This process requires a premium Lose It account, since it relies on the <a href="https://help.loseit.com/hc/en-us/articles/27608466348571-How-to-Send-Email-Reports#h_01J3DRTVK37QWQEBSHK9BCKANC" target="_blank">Automatic Email Reports</a> feature.
+    To activate that process, follow the instructions in the linked guide, and send the daily report to <code><%= ENV["EMAIL_USERNAME"] %></code>.<br>
+    This will automatically import weight, kilocalories, and meals entered in Lose It.
+  </p>
 </div>

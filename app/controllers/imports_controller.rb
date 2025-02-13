@@ -1,6 +1,6 @@
 class ImportsController < ApplicationController
   def create
-    if params[:kind] == "days"
+    if params[:kind] == "weight" || params[:kind] == "kilocalories"
       import_stats
     elsif params[:kind] == "meals"
       import_loseit
@@ -11,8 +11,6 @@ class ImportsController < ApplicationController
 
     redirect_to(root_path, flash: { success: "Import started" })
   end
-
-  private
 
   def import_stats
     file = File.open(params[:file])
