@@ -1,0 +1,59 @@
+<%= form_with(model: fitness_exercise) do |form| %>
+  <% if fitness_exercise.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(fitness_exercise.errors.count, "error") %> prohibited this fitness_exercise from being saved:</h2>
+
+      <ul>
+        <% fitness_exercise.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label(:name, "Name", class: "form-label") %>
+    <%= form.text_field(:name, class: "form-control") %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label(:description, "Description", class: "form-label") %>
+    <%= form.text_area(:description, class: "form-control") %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label(:demonstration_youtube_url, "Demonstration URL", class: "form-label") %>
+    <%= form.text_field(:demonstration_youtube_url, class: "form-control") %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label(:warmup_strategy, "Warmup Strategy", class: "form-label") %>
+    <%= form.select(
+      :warmup_strategy,
+      options_for_select(
+        Fitness::Exercise.warmup_strategies.map { |strategy, id| [strategy.humanize, strategy] },
+        fitness_exercise.warmup_strategy
+      ),
+      { include_blank: true },
+      { class: "form-control" }
+    ) %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label(:tag_ids, "Tags", class: "form-label") %>
+    <%= form.select(
+      :tag_ids,
+      options_for_select(
+        Tag.all.map { |tag| [tag.name.humanize, tag.id] },
+        fitness_exercise.exercise_tags.map(&:tag_id)
+      ),
+      { include_blank: true },
+      { multiple: true, class: "form-control" }
+    ) %>
+
+  </div>
+
+  <div>
+    <%= form.submit(class: "btn btn-primary") %>
+  </div>
+<% end %>

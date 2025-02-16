@@ -1,0 +1,23 @@
+<div id="<%= dom_id workout_plan %>" class="border rounded p-3">
+  <h3><%= workout_plan.name %></h3>
+
+  <div class="d-flex flex-column">
+    <% workout_plan.workout_plan_exercises.each do |workout_plan_exercise| %>
+      <div>
+        <%= link_to(workout_plan_exercise.exercise.name, workout_plan_exercise.exercise) %>
+        <ul>
+          <% workout_plan_exercise.set_plans.chunk { |set| [set.weight, set.reps] }.each do |(weight, reps), set_plans| %>
+            <li>
+              <strong><%= set_plans.size %> <%= "set".pluralize(set_plans.size) %> of</strong> <%= reps %> <%= "rep".pluralize(reps) %>
+              <% unless weight.nil? || weight == 0 %>
+                of <%= weight %>lbs
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+
+      </div>
+    <% end %>
+    <%= link_to("Workout", new_fitness_workout_path(workout_plan_id: workout_plan.id), class: "btn btn-primary") %>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div id="<%= dom_id exercise %>">
+  <p><%= exercise.name %></p>
+  <pre><%= exercise.description %></pre>
+  <% unless exercise.demonstration_youtube_url.blank? %>
+    <%= render '/youtube_embed', url: exercise.demonstration_youtube_url %>
+  <% end %>
+</div>

@@ -1,0 +1,16 @@
+<div class="border rounded p-1" data-set-plan-target="setplan">
+  <%= form.hidden_field(:id) %>
+  <%= form.hidden_field(:workout_plan_exercise_id) %>
+
+  <div class="d-flex">
+    <div class="mb-3">
+      <%= form.label(:reps, "Reps", class: "form-label") %>
+      <%= form.number_field(:reps, class: "form-control reps") %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label(:weight, "Weight", class: "form-label") %>
+      <%= form.number_field(:weight, class: "form-control weight") %>
+    </div>
+  </div>
+</div>

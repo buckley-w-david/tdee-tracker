@@ -9,4 +9,17 @@
   <p class="text-center fw-semibold mt-1">If the blue line is below the red line, you are making progress</p>
 </div>
 
-<%= render template: "days/edit" %>
+<div class="tw-flex tw-flex-col tw-gap-2">
+  <%= render template: "days/edit" %>
+
+  <% if @plans.any? %>
+    <div>
+      <h2>Record your workout</h2>
+      <% @plans.each do |plan| %>
+        <%= link_to(new_fitness_workout_path(workout_plan_id: plan.id), class: "btn btn-primary") do %>
+          Record <%= plan.routine.name %>  - <%= plan.name %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,107 @@
+<audio src="<%=  %>" autoplay="false" width="0" height="0" id="sound1" preload="true"></audio>
+
+<%= form_with(model: fitness_workout) do |form| %>
+  <% if fitness_workout.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(fitness_workout.errors.count, "error") %> prohibited this fitness_workout from being saved:</h2>
+
+      <ul>
+        <% fitness_workout.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :workout_plan_id %>
+  <%= form.hidden_field :date %>
+
+  <div class="tw-flex tw-flex-col tw-gap-3 tw-mb-2" data-controller="rest-timer" data-action="set:setComplete->rest-timer#startTimer" data-rest-timer-sound-url-value="<%= image_url('timer.mp3') %>">
+    <%= form.fields_for(:workout_exercises) do |exercise_fields| %>
+      <div>
+        <%= exercise_fields.hidden_field :exercise_id %>
+        <%= exercise_fields.hidden_field :workout_id %>
+        <details>
+          <% exercise = exercise_fields.object.exercise %>
+          <% workout_exercise = exercise_fields.object %>
+          <summary class="tw-flex">
+            <span><%= exercise.name %></span>
+            <ul>
+              <% workout_exercise.sets.chunk { |set| [set.planned_weight, set.planned_reps] }.each do |(weight, reps), sets| %>
+                <li>
+                  <%= sets.size %> <%= "set".pluralize(sets.size) %> of <%= reps %> <%= "rep".pluralize(reps) %>
+                  <% unless weight.nil? || weight == 0 %>
+                    of <strong><%= weight %>lbs</strong>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </summary>
+
+          <% if exercise.warmup_strategy? %>
+            <div class="tw-flex tw-justify-center tw-mb-1 tw-gap-2">
+              <% exercise.warmup_sets(workout_exercise.sets.first.weight).each_with_index do |(reps, weight), idx| %>
+                <div data-controller="set" data-set-target-reps-value="<%= reps %>">
+                  <label class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-text-center" title="<%= reps %> reps at <%= weight %>lbs">
+                    <span>Warmup <%= idx + 1 %><br><%= weight %>lbs</span>
+                    <%= number_field_tag(:reps, nil, 'data-set-target' => 'reps', 'data-action' => 'click->set#logReps', hidden: true) %>
+                    <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2">
+                      <span class="text-secondary" data-set-target="display">
+                        <%= reps %>
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% unless exercise.demonstration_youtube_url.blank? %>
+            <%= render '/youtube_embed', url: exercise.demonstration_youtube_url %>
+          <% end %>
+        </details>
+        <div class="tw-flex tw-justify-between lg:tw-justify-start tw-gap-2">
+          <%= exercise_fields.fields_for(:sets) do |set_fields| %>
+            <div class="" data-controller="set" data-set-target-reps-value="<%= set_fields.object.planned_reps %>">
+              <%= set_fields.hidden_field :planned_reps %>
+              <%= set_fields.hidden_field :planned_weight %>
+
+              <label class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-cursor-pointer" title="<%= set_fields.object.planned_reps %> reps at <%= set_fields.object.planned_weight %>lbs">
+                <span>Set <%= set_fields.index + 1 %></span>
+                <%# TODO: refactor to a hidden number field that keeps track of the reps paired with a normal div that is the interactive element %>
+                <%= set_fields.number_field(
+                  :reps,
+                  placeholder: set_fields.object.planned_reps,
+                  'data-set-target' => 'reps',
+                  'data-action' => 'click->set#logReps',
+                  hidden: true,
+                ) %>
+                <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2">
+                  <span
+                    <% unless set_fields.object.persisted? %>
+                    class="text-secondary"
+                    <% end %>
+                    data-set-target="display">
+                    <%= set_fields.object.planned_reps %>
+                  </span>
+                </div>
+              </label>
+
+              <!-- <%= set_fields.label :weight, "Weight" %> -->
+              <!-- <%= set_fields.number_field :weight %> -->
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <div data-rest-timer-target="timer" class="tw-text-center tw-mt-4 tw-bg-[white] tw-fixed lg:tw-sticky tw-bottom-0 tw-right-0 tw-border tw-rounded tw-p-2" hidden>
+      <p class="tw-text-xl">Rest</p>
+      <span class="tw-text-xl tw-font-bold" data-rest-timer-target="time">0:00</span>
+    </div>
+  </div>
+
+  <div>
+    <%= form.submit(class: "btn btn-primary") %>
+  </div>
+<% end %>

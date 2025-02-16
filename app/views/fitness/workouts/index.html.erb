@@ -1,0 +1,36 @@
+<% content_for :title, "Workouts" %>
+
+<h1>Workouts</h1>
+
+<%= month_calendar do |date| %>
+  <% if date.day == 1 %>
+    <span><%= date.strftime("%B %d") %></span>
+  <% else %>
+    <span><%= date.strftime("%d") %></span>
+  <% end %>
+
+  <% workouts = @workouts[date] %>
+  <% if workouts %>
+    <ul>
+    <% workouts.each do |workout| %>
+      <li>
+        <%= link_to(edit_fitness_workout_path(workout)) do %>
+          <%= workout.workout_plan.name %>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+  <% end %>
+  <% plans = @plans[date] %>
+  <% if plans %>
+    <ul>
+    <% plans.each do |plan| %>
+      <li>
+        <%= link_to(new_fitness_workout_path(workout_plan_id: plan.id), class: "text-secondary") do %>
+          <%= plan.name %>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+  <% end %>
+<% end %>

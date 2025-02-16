@@ -1,0 +1,28 @@
+<div class="border rounded p-3 mb-2" data-routine-target="workout" data-controller="workout-plan">
+  <%= form.hidden_field(:id) %>
+  <%= form.hidden_field(:routine_id) %>
+
+  <div class="mb-3">
+    <%= form.label(:name, "Workout Name", class: "form-label") %>
+    <%= form.text_field(:name, class: "form-control") %>
+  </div>
+
+  <%= form.fields_for(:workout_plan_exercises) do |f| %>
+    <%= render "workout_plan_exercise_fields", form: f %>
+  <% end %>
+
+  <span data-workout-plan-target="exerciseend"></span>
+
+  <div class="mt-2">
+    <button class="btn btn-secondary" type="button" data-action="click->workout-plan#addWorkout" data-workout-plan-target="add">Add Exercise</button>
+  </div>
+
+  <div style="display: none !important;" aria-hidden="true">
+    <%= form.fields(:workout_plan_exercises, model: Fitness::WorkoutPlanExercise.new, child_index: "NEW_EXCERCISE") do |exercise| %>
+      <!-- When the "Add Exercise" button is clicked, some javascript copies this form into the main one -->
+      <div data-workout-plan-target="empty">
+        <%= render "workout_plan_exercise_fields", form: exercise %>
+      </div>
+    <% end %>
+  </div>
+</div>

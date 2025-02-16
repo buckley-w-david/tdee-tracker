@@ -1,0 +1,11 @@
+<div id="<%= dom_id routine %>">
+  <h2><%= routine.name %></h2>
+
+  <hr/>
+
+  <div class="d-flex flex-column gap-2">
+    <% routine.workout_plans.each do |workout_plan| %>
+      <%= render "workout_plan", workout_plan: workout_plan %>
+    <% end %>
+  </div>
+</div>

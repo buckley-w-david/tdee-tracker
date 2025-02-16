@@ -1,0 +1,12 @@
+<% content_for :title, "Editing workout" %>
+
+<h1>Editing workout</h1>
+
+<%= render "form", fitness_workout: @fitness_workout %>
+
+<br>
+
+<div class="tw-flex gap-2">
+  <%= link_to("Back to workouts", fitness_workouts_path, class: "btn btn-secondary")%>
+  <%= button_to("Delete workout", @fitness_workout, method: :delete, class: "btn btn-danger")%>
+</div>

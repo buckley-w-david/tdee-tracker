@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_23_180521) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_16_185804) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -49,6 +49,94 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_23_180521) do
     t.index ["user_id"], name: "index_days_on_user_id"
   end
 
+  create_table "fitness_exercise_tags", force: :cascade do |t|
+    t.integer "tag_id", null: false
+    t.integer "exercise_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_fitness_exercise_tags_on_exercise_id"
+    t.index ["tag_id"], name: "index_fitness_exercise_tags_on_tag_id"
+  end
+
+  create_table "fitness_exercises", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.text "demonstration_youtube_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "warmup_strategy"
+  end
+
+  create_table "fitness_routines", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "name"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "schedule_type"
+    t.index ["user_id"], name: "index_fitness_routines_on_user_id"
+  end
+
+  create_table "fitness_set_plans", force: :cascade do |t|
+    t.integer "workout_plan_exercise_id", null: false
+    t.integer "reps"
+    t.integer "weight"
+    t.integer "duration"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workout_plan_exercise_id"], name: "index_fitness_set_plans_on_workout_plan_exercise_id"
+  end
+
+  create_table "fitness_sets", force: :cascade do |t|
+    t.integer "workout_exercise_id", null: false
+    t.integer "reps"
+    t.integer "planned_reps"
+    t.integer "weight"
+    t.integer "planned_weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workout_exercise_id"], name: "index_fitness_sets_on_workout_exercise_id"
+  end
+
+  create_table "fitness_workout_exercises", force: :cascade do |t|
+    t.integer "workout_id", null: false
+    t.integer "exercise_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_fitness_workout_exercises_on_exercise_id"
+    t.index ["workout_id"], name: "index_fitness_workout_exercises_on_workout_id"
+  end
+
+  create_table "fitness_workout_plan_exercises", force: :cascade do |t|
+    t.integer "workout_plan_id", null: false
+    t.integer "exercise_id", null: false
+    t.integer "weight_progression"
+    t.integer "duration_progression"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_fitness_workout_plan_exercises_on_exercise_id"
+    t.index ["workout_plan_id"], name: "index_fitness_workout_plan_exercise_on_workout_plan_id"
+  end
+
+  create_table "fitness_workout_plans", force: :cascade do |t|
+    t.string "name"
+    t.integer "routine_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "planned_date"
+    t.index ["routine_id"], name: "index_fitness_workout_plans_on_routine_id"
+  end
+
+  create_table "fitness_workouts", force: :cascade do |t|
+    t.date "date"
+    t.integer "workout_plan_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_fitness_workouts_on_user_id"
+    t.index ["workout_plan_id"], name: "index_fitness_workouts_on_workout_plan_id"
+  end
+
   create_table "food_entries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -85,6 +173,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_23_180521) do
     t.index ["day_id"], name: "index_meals_on_day_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -101,6 +195,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_23_180521) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "days", "users"
+  add_foreign_key "fitness_exercise_tags", "fitness_exercises", column: "exercise_id"
+  add_foreign_key "fitness_exercise_tags", "tags"
+  add_foreign_key "fitness_routines", "users"
+  add_foreign_key "fitness_set_plans", "fitness_workout_plan_exercises", column: "workout_plan_exercise_id"
+  add_foreign_key "fitness_sets", "fitness_workout_exercises", column: "workout_exercise_id"
+  add_foreign_key "fitness_workout_exercises", "fitness_exercises", column: "exercise_id"
+  add_foreign_key "fitness_workout_exercises", "fitness_workouts", column: "workout_id"
+  add_foreign_key "fitness_workout_plan_exercises", "fitness_exercises", column: "exercise_id"
+  add_foreign_key "fitness_workout_plan_exercises", "fitness_workout_plans", column: "workout_plan_id"
+  add_foreign_key "fitness_workout_plans", "fitness_routines", column: "routine_id"
+  add_foreign_key "fitness_workouts", "fitness_workout_plans", column: "workout_plan_id"
+  add_foreign_key "fitness_workouts", "users"
   add_foreign_key "food_entries", "foods"
   add_foreign_key "food_entries", "meals"
   add_foreign_key "goals", "users"

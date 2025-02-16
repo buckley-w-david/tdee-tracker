@@ -1,0 +1,15 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Exercises" %>
+
+<h1>Exercises</h1>
+
+<div id="fitness_exercises">
+  <% @fitness_exercises.each do |exercise| %>
+    <p>
+      <%= link_to(exercise.name, exercise) %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New exercise", new_fitness_exercise_path %>

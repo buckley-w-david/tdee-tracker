@@ -16,6 +16,8 @@ class DaysController < ApplicationController
     @kilocalories = stats.kilocalories
     @tdee = stats.tdee
     @ema = stats.ema
+
+    @plans = @current_user.workout_plans.where(planned_date: @date)
   end
 
   def new

@@ -8,6 +8,10 @@ class User < ApplicationRecord
   has_many :food_entries, through: :meals
   has_many :foods, through: :food_entries
 
+  has_many :routines, class_name: "Fitness::Routine"
+  has_many :workout_plans, class_name: "Fitness::WorkoutPlan", through: :routines
+  has_many :workouts, class_name: "Fitness::Workout"
+
   serialize :google_fit_token, coder: JSON
 
   validates_uniqueness_of :username
