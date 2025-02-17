@@ -77,6 +77,8 @@ gem "technical-analysis", "~> 0.2.4"
 
 gem "solid_queue", "~> 0.8.2"
 
+gem "mission_control-jobs"
+
 gem "simple_calendar", "~> 3.0"
 
 gem "pagy", "~> 9.0"
