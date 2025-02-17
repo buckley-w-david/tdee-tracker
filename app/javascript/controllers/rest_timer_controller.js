@@ -15,19 +15,25 @@ export default class extends Controller {
     let {reps, target} = event.detail;
     clearTimeout(this.timer);
 
+    let seconds;
     if (reps === target) {
-      this.seconds = 90;
+      seconds = 90;
     } else {
-      this.seconds = 60*5;
+      seconds = 60*5;
     }
 
     this.timeTarget.innerHTML = this.#formatTime(this.seconds);
     this.timerTarget.hidden = false;
-    this.timer = setInterval(() => {
-      this.seconds -= 1;
-      this.timeTarget.innerText = this.#formatTime(this.seconds);
 
-      if (this.seconds === 0) {
+    const targetTime = Date.now() + seconds * 1000;
+
+    // TODO: Investigate running the timer in a web worker to avoid the timer being paused while the tab is in the background.
+    this.timer = setInterval(() => {
+      let now = Date.now();
+      let timeLeft = Math.round((targetTime - now) / 1000);
+      this.timeTarget.innerText = this.#formatTime(timeLeft);
+
+      if (timeLeft <= 0) {
         clearInterval(this.timer);
         this.timerTarget.hidden = true;
         this.dispatch("restComplete");
@@ -35,7 +41,7 @@ export default class extends Controller {
         const audio = new Audio(this.soundUrlValue);
         audio.play();
       }
-    }, 1000);
+    }, 200);
   }
 
   #formatTime(seconds) {

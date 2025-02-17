@@ -44,11 +44,10 @@
                 <div data-controller="set" data-set-target-reps-value="<%= reps %>">
                   <label class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-text-center" title="<%= reps %> reps at <%= weight %>lbs">
                     <span>Warmup <%= idx + 1 %><br><%= weight %>lbs</span>
-                    <%= number_field_tag(:reps, nil, 'data-set-target' => 'reps', 'data-action' => 'click->set#logReps', hidden: true) %>
-                    <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2">
-                      <span class="text-secondary" data-set-target="display">
-                        <%= reps %>
-                      </span>
+                    <%= number_field_tag(:reps, nil, placeholder: reps, 'data-set-target' => 'reps', 'data-action' => 'click->set#logReps', class: "tw-peer", hidden: true) %>
+
+                    <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2 tw-font-semibold peer-placeholder-shown:tw-font-light">
+                      <span data-set-target="display"><%= reps %></span>
                     </div>
                   </label>
                 </div>
@@ -74,16 +73,11 @@
                   placeholder: set_fields.object.planned_reps,
                   'data-set-target' => 'reps',
                   'data-action' => 'click->set#logReps',
+                  class: 'tw-peer',
                   hidden: true,
                 ) %>
-                <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2">
-                  <span
-                    <% unless set_fields.object.persisted? %>
-                    class="text-secondary"
-                    <% end %>
-                    data-set-target="display">
-                    <%= set_fields.object.planned_reps %>
-                  </span>
+                <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2 tw-font-semibold peer-placeholder-shown:tw-font-light">
+                  <span data-set-target="display"><%= set_fields.object.reps || set_fields.object.planned_reps %></span>
                 </div>
               </label>
 
