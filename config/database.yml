@@ -28,7 +28,10 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  adapter: sqlite3
-  database: storage/production.sqlite3
-  pool: 5
-  timeout: 5000
+  primary:
+    <<: *default
+    database: storage/production.sqlite3
+  queue:
+    <<: *default
+    database: storage/production_queue.sqlite3
+    migrations_path: db/queue_migrate
