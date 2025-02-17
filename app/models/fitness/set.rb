@@ -3,7 +3,7 @@ module Fitness
     belongs_to :workout_exercise, class_name: "Fitness::WorkoutExercise"
 
     def completed?
-      reps == planned_reps && weight == planned_weight
+      reps >= planned_reps && weight >= planned_weight
     end
 
     def failed?
