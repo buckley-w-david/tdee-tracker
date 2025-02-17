@@ -24,5 +24,6 @@ module TdeeTracker
     # I am an evil man who acknowledges his trangession by straying from the one true path of UTC
     config.time_zone = "Eastern Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.active_job.queue_adapter = :async
   end
 end
