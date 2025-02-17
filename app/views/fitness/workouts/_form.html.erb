@@ -46,7 +46,7 @@
                     <span>Warmup <%= idx + 1 %><br><%= weight %>lbs</span>
                     <%= number_field_tag(:reps, nil, placeholder: reps, 'data-set-target' => 'reps', 'data-action' => 'click->set#logReps', class: "tw-peer", hidden: true) %>
 
-                    <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2 tw-font-semibold peer-placeholder-shown:tw-font-light">
+                    <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-rounded-md tw-p-2 tw-m-2 tw-font-semibold peer-placeholder-shown:tw-font-light tw-border-2 peer-placeholder-shown:tw-border tw-border-green-100 peer-placeholder-shown:tw-border-inherit">
                       <span data-set-target="display"><%= reps %></span>
                     </div>
                   </label>
@@ -76,7 +76,7 @@
                   class: 'tw-peer',
                   hidden: true,
                 ) %>
-                <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2 tw-font-semibold peer-placeholder-shown:tw-font-light">
+                <div class="tw-max-w-[50px] tw-grow tw-aspect-square tw-text-center tw-border tw-rounded-md tw-p-2 tw-m-2 tw-font-semibold peer-placeholder-shown:tw-font-light tw-border-2 peer-placeholder-shown:tw-border tw-border-green-100 peer-placeholder-shown:tw-border-inherit">
                   <span data-set-target="display"><%= set_fields.object.reps || set_fields.object.planned_reps %></span>
                 </div>
               </label>
