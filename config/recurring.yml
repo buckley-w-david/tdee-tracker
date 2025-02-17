@@ -1,0 +1,4 @@
+production:
+  daily_sync:
+    class: DailySyncJob
+    schedule: every day at 11am

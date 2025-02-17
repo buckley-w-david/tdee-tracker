@@ -99,8 +99,8 @@ Rails.application.configure do
   #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
   # ]
 
-  # This thing is never being hosted on the internet, allowing all hosts.
-  config.hosts.clear
+  config.hosts << "192.168.2.41"
+  config.hosts << "tdee.fizzbuzz.ca"
 
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
