@@ -13,6 +13,11 @@
     <%= form.number_field(:weight_progression, class: "form-control") %>
   </div>
 
+  <div class="mb-3">
+    <%= form.label(:reps_progression, "Reps Progression", class: "form-label") %>
+    <%= form.number_field(:reps_progression, class: "form-control") %>
+  </div>
+
   <%= form.fields_for(:set_plans) do |f| %>
     <%= render "set_plan_fields", form: f %>
   <% end %>

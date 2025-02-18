@@ -6,5 +6,13 @@ module Fitness
     has_many :sets, dependent: :destroy, class_name: "Fitness::Set"
 
     accepts_nested_attributes_for :sets, allow_destroy: true
+
+    def completed?
+      sets.all?(&:completed?)
+    end
+
+    def failed?
+      !completed?
+    end
   end
 end

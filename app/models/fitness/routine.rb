@@ -26,7 +26,7 @@ module Fitness
         recent_workouts.each do |workout|
           workout.workout_exercises.each do |workout_exercise|
             recent_performance[workout_exercise.exercise_id] ||= []
-            recent_performance[workout_exercise.exercise_id] << workout_exercise.sets.all?(&:completed?)
+            recent_performance[workout_exercise.exercise_id] << workout_exercise.completed?
           end
         end
 
@@ -35,11 +35,20 @@ module Fitness
 
           if recent_performance[workout_plan_exercise.exercise_id].first
             workout_plan_exercise.set_plans.each do |set_plan|
-              set_plan.weight += workout_plan_exercise.weight_progression
+              # TODO: Should I allow simultaneous progression of weight and reps?
+              if workout_plan_exercise.weight_progression?
+                set_plan.weight += workout_plan_exercise.weight_progression
+              elsif workout_plan_exercise.reps_progression?
+                set_plan.reps = [ set_plan.reps + workout_plan_exercise.reps_progression, workout_plan_exercise.auto_reps_max ].min
+              end
             end
           elsif recent_performance[workout_plan_exercise.exercise_id] == [ false, false, false ]
             workout_plan_exercise.set_plans.each do |set_plan|
-              set_plan.weight -= workout_plan_exercise.weight_progression
+              if workout_plan_exercise.weight_progression?
+                set_plan.weight -= workout_plan_exercise.weight_progression
+              elsif workout_plan_exercise.reps_progression?
+                set_plan.reps = [ 1, set_plan.reps - workout_plan_exercise.reps_progression ].max
+              end
             end
           end
         end

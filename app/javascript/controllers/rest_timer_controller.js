@@ -1,5 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
+// FIXME: The timer keeps going even after navigating away from the page.
+//        This is probably because of Turbo
 export default class extends Controller {
 
   static targets = ['timer', 'time'];
@@ -26,6 +28,8 @@ export default class extends Controller {
     this.timerTarget.hidden = false;
 
     const targetTime = Date.now() + seconds * 1000;
+
+    if (this.timer) clearInterval(this.timer);
 
     // TODO: Investigate running the timer in a web worker to avoid the timer being paused while the tab is in the background.
     this.timer = setInterval(() => {

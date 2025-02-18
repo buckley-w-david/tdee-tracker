@@ -85,6 +85,7 @@ class Fitness::RoutinesController < ApplicationController
           :workout_plan_id,
           :exercise_id,
           :weight_progression,
+          :reps_progression,
           set_plans_attributes: [
             :id,
             :workout_plan_exercise_id,
