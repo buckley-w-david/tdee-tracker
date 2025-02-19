@@ -101,6 +101,7 @@ Rails.application.configure do
 
   config.hosts << "192.168.2.41"
   config.hosts << "tdee.fizzbuzz.ca"
+  config.hosts << "jellyfin"
 
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
