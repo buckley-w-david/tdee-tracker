@@ -75,7 +75,7 @@ gem "chartkick", "~> 5.1"
 
 gem "technical-analysis", "~> 0.2.4"
 
-gem "solid_queue", "~> 0.8.2"
+gem "solid_queue", "~> 1.0"
 
 gem "mission_control-jobs"
 
