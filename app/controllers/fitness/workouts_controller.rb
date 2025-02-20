@@ -85,9 +85,11 @@ class Fitness::WorkoutsController < ApplicationController
         :date,
         :workout_plan_id,
         workout_exercises_attributes: [
+          :id,
           :workout_id,
           :exercise_id,
           sets_attributes: [
+            :id,
             :workout_exercise_id,
             :reps,
             :planned_reps,
