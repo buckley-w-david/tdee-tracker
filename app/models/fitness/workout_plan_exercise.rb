@@ -11,5 +11,9 @@ module Fitness
     def auto_reps_max
       12
     end
+
+    def auto_reps_min
+      6
+    end
   end
 end

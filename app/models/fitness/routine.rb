@@ -35,19 +35,31 @@ module Fitness
 
           if recent_performance[workout_plan_exercise.exercise_id].first
             workout_plan_exercise.set_plans.each do |set_plan|
-              # TODO: Should I allow simultaneous progression of weight and reps?
-              if workout_plan_exercise.weight_progression?
+              if workout_plan_exercise.reps_progression?
+                new_reps = set_plan.reps + workout_plan_exercise.reps_progression
+                if workout_plan_exercise.weight_progression? && new_reps > workout_plan_exercise.auto_reps_max
+                  set_plan.reps = workout_plan_exercise.auto_reps_min
+                  set_plan.weight += workout_plan_exercise.weight_progression
+                else
+                  set_plan.reps = [ new_reps, workout_plan_exercise.auto_reps_max ].min
+                end
+              elsif workout_plan_exercise.weight_progression?
                 set_plan.weight += workout_plan_exercise.weight_progression
-              elsif workout_plan_exercise.reps_progression?
-                set_plan.reps = [ set_plan.reps + workout_plan_exercise.reps_progression, workout_plan_exercise.auto_reps_max ].min
               end
             end
+          # FIXME: We should probably only check for failures _at the same weight and reps_
           elsif recent_performance[workout_plan_exercise.exercise_id] == [ false, false, false ]
             workout_plan_exercise.set_plans.each do |set_plan|
-              if workout_plan_exercise.weight_progression?
+              if workout_plan_exercise.reps_progression?
+                new_reps = set_plan.reps - workout_plan_exercise.reps_progression
+                if workout_plan_exercise.weight_progression? && new_reps < workout_plan_exercise.auto_reps_min
+                  set_plan.reps = workout_plan_exercise.auto_reps_max
+                  set_plan.weight -= workout_plan_exercise.weight_progression
+                else
+                  set_plan.reps = [ 1, new_reps ].max
+                end
+              elsif workout_plan_exercise.weight_progression?
                 set_plan.weight -= workout_plan_exercise.weight_progression
-              elsif workout_plan_exercise.reps_progression?
-                set_plan.reps = [ 1, set_plan.reps - workout_plan_exercise.reps_progression ].max
               end
             end
           end
