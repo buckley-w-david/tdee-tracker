@@ -100,7 +100,7 @@ class Fitness::WorkoutsController < ApplicationController
     ).tap do |params|
       params[:workout_exercises_attributes].each do |_, workout_exercise|
         workout_exercise[:sets_attributes].each do |_, set|
-          set[:reps] = "0" if set[:reps].blank?
+          set[:reps] = nil if set[:reps].blank?
           set[:weight] = set[:planned_weight] if set[:weight].blank?
         end
       end

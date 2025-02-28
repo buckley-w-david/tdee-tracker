@@ -8,6 +8,7 @@ module Fitness
     accepts_nested_attributes_for :workout_exercises, allow_destroy: true
 
     after_create :schedule_next_workout
+    after_update :reasses_workout
 
     def routine
       workout_plan.routine
@@ -31,6 +32,10 @@ module Fitness
 
     def schedule_next_workout
       routine.schedule!(workout_plan)
+    end
+
+    def reasses_workout
+      # TODO: Implement
     end
   end
 end

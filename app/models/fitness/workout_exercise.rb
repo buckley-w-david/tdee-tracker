@@ -12,7 +12,21 @@ module Fitness
     end
 
     def failed?
-      !completed?
+      sets.any?(&:failed?)
+    end
+
+    def dnf?
+      !completed? && !failed?
+    end
+
+    def status
+      if completed?
+        :completed
+      elsif failed?
+        :failed
+      else
+        :dnf
+      end
     end
   end
 end

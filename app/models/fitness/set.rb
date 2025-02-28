@@ -3,11 +3,25 @@ module Fitness
     belongs_to :workout_exercise, class_name: "Fitness::WorkoutExercise"
 
     def completed?
-      reps >= planned_reps && weight >= planned_weight
+      !dnf? && reps >= planned_reps && weight >= planned_weight
     end
 
     def failed?
-      !completed?
+      !dnf? && !completed?
+    end
+
+    def dnf?
+      reps.nil?
+    end
+
+    def status
+      if completed?
+        :completed
+      elsif failed?
+        :failed
+      else
+        :dnf
+      end
     end
   end
 end
