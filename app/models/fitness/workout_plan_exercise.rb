@@ -13,7 +13,7 @@ module Fitness
     end
 
     def auto_reps_min
-      6
+      8
     end
   end
 end
