@@ -76,6 +76,7 @@ class Fitness::RoutinesController < ApplicationController
   def fitness_routine_params
     params.require(:fitness_routine).permit(
       :name,
+      schedule: [],
       workout_plans_attributes: [
         :id,
         :routine_id,

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_18_002638) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_09_165054) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -73,7 +73,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_18_002638) do
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "schedule_type"
+    t.text "schedule", default: "[\"monday\", \"wednesday\", \"friday\"]"
     t.index ["user_id"], name: "index_fitness_routines_on_user_id"
   end
 

@@ -2,7 +2,8 @@
   <%= form_with(model: fitness_routine) do |form| %>
     <% if fitness_routine.errors.any? %>
       <div style="color: red">
-        <h2><%= pluralize(fitness_routine.errors.count, "error") %> prohibited this fitness_routine from being saved:</h2>
+        <h2><%= pluralize(fitness_routine.errors.count, "error") %>
+          prohibited this fitness_routine from being saved:</h2>
 
         <ul>
           <% fitness_routine.errors.each do |error| %>
@@ -17,6 +18,20 @@
       <%= form.text_field(:name, class: "form-control") %>
     </div>
 
+    <div>
+      <%= form.label(:schedule, "Schedule", class: "form-label") %>
+      <%= render SimpleCalendar::WorkoutWeekCalendar.new(self) do |date| %>
+        <label class="tw-w-full tw-h-full has-[:checked]:tw-bg-green-200">
+          <%= form.check_box(
+            :schedule,
+            { multiple: true, hidden: true },
+            date.strftime("%A").downcase,
+            nil,
+          ) %>
+        </label>
+      <% end %>
+    </div>
+
     <%= form.fields_for(:workout_plans) do |f| %>
       <%= render "workout_plan_fields", form: f %>
     <% end %>
@@ -24,19 +39,24 @@
     <span data-routine-target="workoutend"></span>
 
     <div class="mt-2">
-      <button class="btn btn-secondary" type="button" data-action="click->routine#addWorkout" data-routine-target="add">Add Workout</button>
+      <button
+        class="btn btn-secondary"
+        type="button"
+        data-action="click->routine#addWorkout"
+        data-routine-target="add"
+      >Add Workout</button>
     </div>
 
     <div>
       <%= form.submit(class: "btn btn-primary") %>
     </div>
   <% end %>
-
   <!-- Hidden form for adding new workouts -->
   <div style="display: none !important;" aria-hidden="true">
     <%= form_with(model: fitness_routine) do |form| %>
       <%= form.fields(:workout_plans, model: Fitness::WorkoutPlan.new, child_index: "NEW_WORKOUT") do |workout| %>
-        <!-- When the "Add Workout" button is clicked, some javascript copies this form into the main one -->
+        <!-- When the "Add Workout" button is clicked, some javascript copies
+        this form into the main one -->
         <div data-routine-target="empty">
           <%= render "workout_plan_fields", form: workout %>
         </div>

@@ -32,6 +32,7 @@ module Fitness
 
     def schedule_next_workout
       routine.schedule!(workout_plan)
+      workout_plan.progress!
     end
 
     def reasses_workout
