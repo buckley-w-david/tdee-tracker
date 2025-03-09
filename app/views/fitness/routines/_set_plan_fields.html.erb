@@ -1,8 +1,11 @@
-<div class="border rounded p-1" data-set-plan-target="setplan">
+<div
+  class="border rounded p-1 set-plan tw-flex tw-justify-between"
+  data-set-plan-target="setplan"
+>
   <%= form.hidden_field(:id) %>
   <%= form.hidden_field(:workout_plan_exercise_id) %>
 
-  <div class="d-flex">
+  <div class="d-flex gap-1">
     <div class="mb-3">
       <%= form.label(:reps, "Reps", class: "form-label") %>
       <%= form.number_field(:reps, class: "form-control reps") %>
@@ -13,4 +16,12 @@
       <%= form.number_field(:weight, class: "form-control weight") %>
     </div>
   </div>
+
+  <button
+    type="button"
+    data-action="click->set-plan#removeSetPlan"
+    class="tw-me-2"
+  >
+    <%= render "icons/trash" %>
+  </button>
 </div>
