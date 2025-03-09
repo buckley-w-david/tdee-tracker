@@ -37,7 +37,7 @@ module Fitness
         workout_plans.update_all(planned_date: nil)
 
         ordered_plans.each do |plan|
-          schedule!(plan)
+          schedule!(plan.reload)
         end
       end
     end
