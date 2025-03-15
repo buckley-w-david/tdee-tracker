@@ -2,3 +2,6 @@ production:
   daily_sync:
     class: DailySyncJob
     schedule: every day at 11am
+  missed_workout_cleanup:
+    class: CleanupUnfinishedWorkoutPlansJob
+    schedule: every day at 1am
