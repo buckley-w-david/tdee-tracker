@@ -15,7 +15,7 @@ module Fitness
     # TODO: more flexible scheduling
     def schedule!(workout_plan)
       workout_plans.maximum(:planned_date).tap do |last_workout|
-        last_workout_date = last_workout || Date.current
+        last_workout_date = last_workout || Date.yesterday
         candidates = schedule.map { |day| last_workout_date.next_occurring(day.to_sym) }
         workout_plan.planned_date = candidates.min_by { |date| (date - Date.current).abs }
       end
