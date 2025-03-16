@@ -8,7 +8,7 @@
   <% @fitness_routines.each do |fitness_routine| %>
     <%= render fitness_routine %>
     <p>
-      <%= link_to "Show this routine", fitness_routine %>
+      <%= link_to "Edit this routine", edit_fitness_routine_path(fitness_routine) %>
     </p>
   <% end %>
 </div>

@@ -21,13 +21,15 @@
     <div>
       <%= form.label(:schedule, "Schedule", class: "form-label") %>
       <%= render SimpleCalendar::WorkoutWeekCalendar.new(self) do |date| %>
-        <label class="tw-w-full tw-h-full has-[:checked]:tw-bg-green-200">
+        <label class="tw-w-full tw-h-full tw-cursor-pointer tw-flex">
           <%= form.check_box(
             :schedule,
-            { multiple: true, hidden: true },
+            { multiple: true, hidden: true, class: "tw-peer" },
             date.strftime("%A").downcase,
             nil,
           ) %>
+          <%= render "icons/checkmark",
+          classes: "tw-hidden peer-checked:tw-block tw-m-auto tw-text-[#10a64a]" %>
         </label>
       <% end %>
     </div>

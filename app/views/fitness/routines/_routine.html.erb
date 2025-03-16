@@ -1,6 +1,10 @@
 <div id="<%= dom_id routine %>">
   <h2><%= routine.name %></h2>
 
+  <% routine.schedule.each do |day| %>
+    <span class="badge bg-secondary"><%= day.humanize %></span>
+  <% end %>
+
   <hr/>
 
   <div class="d-flex flex-column gap-2">
